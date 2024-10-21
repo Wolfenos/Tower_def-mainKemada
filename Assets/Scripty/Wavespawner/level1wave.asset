@@ -12,8 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ca99ead213afd44aa234eccfa29a934, type: 3}
   m_Name: level1wave
   m_EditorClassIdentifier: 
-  enemyPrefab: {fileID: 31693450219235390, guid: 44db838a769032b4d820131b5e25a2d2,
-    type: 3}
-  pathIndex: 0
-  numberOfEnemies: 10
-  spawnInterval: 1
+  pathWaves:
+  - enemyPath: {fileID: 3719454634244873844, guid: 4a39af7dbd61a454bb6453ac3e2fb080,
+      type: 3}
+    enemyTypes:
+    - {fileID: 31693450219235390, guid: 44db838a769032b4d820131b5e25a2d2, type: 3}
+    enemyCounts: 32000000
+    spawnInterval: 1
+  waveDelay: 1

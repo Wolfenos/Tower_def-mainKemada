@@ -4,52 +4,53 @@ namespace KemadaTD
 {
     public class Bullet : MonoBehaviour
     {
-        public float speed = 70f; // Rychlost projektilu
-        private Transform target; // Cíl, na který střela míří
-        private float damage;     // Poškození, které střela způsobí
+        private Transform target;
+        private float damage; // Bullet damage
 
-        // Inicializuje střelu s cílem a poškozením
-        public void Seek(Transform target, float damage)
+        public float speed = 20f;
+
+        // Method to set the bullet's target and damage
+        public void Seek(Transform _target, float _damage)
         {
-            this.target = target;
-            this.damage = damage;
+            target = _target;
+            damage = _damage;
         }
 
         private void Update()
         {
-            // Pokud není cíl, střela se zničí
             if (target == null)
             {
                 Destroy(gameObject);
                 return;
             }
 
-            // Pohybuje se směrem k cíli
+            // Move the bullet towards the target
             Vector3 direction = target.position - transform.position;
             float distanceThisFrame = speed * Time.deltaTime;
 
-            // Kontrola, zda střela zasáhla cíl
+            // Check if we reach the target
             if (direction.magnitude <= distanceThisFrame)
             {
                 HitTarget();
                 return;
             }
 
+            // Move the bullet closer to the target
             transform.Translate(direction.normalized * distanceThisFrame, Space.World);
-            transform.LookAt(target);
         }
 
-        // Po zásahu aplikuje poškození a zničí střelu
+        // When the bullet hits the target, apply damage
         private void HitTarget()
         {
-            EnemyHealth enemyHealth = target.GetComponent<EnemyHealth>();
-
-            if (enemyHealth != null)
+            // Check if the target has the Enemy component
+            Enemy enemy = target.GetComponent<Enemy>();
+            if (enemy != null)
             {
-                enemyHealth.TakeDamage(damage);
+                // Apply damage to the enemy
+                enemy.TakeDamage(damage);
             }
 
-            Destroy(gameObject); // Zničí střelu po zásahu
+            Destroy(gameObject); // Destroy the bullet after it hits
         }
     }
 }
