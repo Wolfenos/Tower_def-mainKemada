@@ -1,3 +1,4 @@
+using KemadaTD;
 using UnityEngine;
 
 namespace KemadaTD
@@ -13,7 +14,8 @@ namespace KemadaTD
             // Iterate through all grid cells and update turret positions
             foreach (GridCell cell in turretBuilder.gridCells)
             {
-                if (cell.HasTurret())
+                // Replace HasTurret() with !IsEmpty(), which checks if the grid cell is occupied
+                if (!cell.IsEmpty())
                 {
                     UpdateTurretPosition(cell);
                 }
