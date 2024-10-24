@@ -1,4 +1,3 @@
-using KemadaTD;
 using UnityEngine;
 
 namespace KemadaTD
@@ -6,16 +5,17 @@ namespace KemadaTD
     public class CircleGridController : MonoBehaviour
     {
         public Transform circleTransform; // The rotating circle
-        public TurretBuilder turretBuilder;
 
         // This method should be called whenever the circle rotates
         public void OnCircleRotated(float degrees)
         {
-            // Iterate through all grid cells and update turret positions
-            foreach (GridCell cell in turretBuilder.gridCells)
+            // Find all grid cells that are children of the circle
+            GridCell[] gridCells = circleTransform.GetComponentsInChildren<GridCell>();
+
+            // Update turret positions based on the circle's new rotation
+            foreach (GridCell cell in gridCells)
             {
-                // Replace HasTurret() with !IsEmpty(), which checks if the grid cell is occupied
-                if (!cell.IsEmpty())
+                if (cell.HasTurret())
                 {
                     UpdateTurretPosition(cell);
                 }

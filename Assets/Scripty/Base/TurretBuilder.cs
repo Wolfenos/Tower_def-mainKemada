@@ -1,44 +1,75 @@
+using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace KemadaTD
 {
     public class TurretBuilder : MonoBehaviour
     {
-        // Reference to the grid cells on the circle
-        public GridCell[] gridCells;
+        // Turret prefabs that can be selected (assigned in the Inspector)
+        public GameObject[] turretPrefabs;
+        public int maxTurretsInMenu = 3; // Control how many turrets can appear in the build menu
 
-        // Turret prefab to instantiate
-        public GameObject turretPrefab;
+        // UI elements for building
+        public GameObject buildMenuUI; // The UI panel for the turret selection menu
+        public Button[] turretButtons; // Buttons for selecting turrets
+        public float buildTime = 3f; // Time it takes to build a turret (editable in the Inspector)
 
-        // Try to place a turret at the specified grid position
-        public void TryPlaceTurret(Vector3 gridPosition)
+        private GridCell selectedGridCell; // The currently selected grid cell
+
+        private void Start()
         {
-            GridCell cell = GetGridCellAtPosition(gridPosition);
-            if (cell != null && cell.IsEmpty())
-            {
-                PlaceTurret(cell);
-            }
+            // Initially hide the build menu
+            buildMenuUI.SetActive(false);
         }
 
-        // Place a turret at a specific grid cell
-        private void PlaceTurret(GridCell cell)
+        // Show the build menu when a grid cell is clicked
+        public void ShowBuildMenu(GridCell gridCell)
         {
-            GameObject newTurret = Instantiate(turretPrefab, cell.transform.position, Quaternion.identity);
-            cell.SetTurret(newTurret); // Mark the cell as occupied
-        }
+            selectedGridCell = gridCell;
 
-        // Find the grid cell at a specific position
-        private GridCell GetGridCellAtPosition(Vector3 position)
-        {
-            // Assuming you use a method like a raycast or simple 2D grid mapping
-            foreach (GridCell cell in gridCells)
+            // Enable only the buttons for available turrets
+            for (int i = 0; i < turretButtons.Length; i++)
             {
-                if (cell.ContainsPosition(position))
+                if (i < turretPrefabs.Length && i < maxTurretsInMenu)
                 {
-                    return cell;
+                    turretButtons[i].gameObject.SetActive(true);
+                    int turretIndex = i; // Capture the correct index for the turret
+                    turretButtons[i].onClick.RemoveAllListeners(); // Clear any existing listeners
+                    turretButtons[i].onClick.AddListener(() => StartBuildingTurret(turretIndex));
+                }
+                else
+                {
+                    turretButtons[i].gameObject.SetActive(false); // Disable unused buttons
                 }
             }
-            return null;
+
+            // Show the menu UI
+            buildMenuUI.SetActive(true);
+        }
+
+        // Start the process of building a turret
+        private void StartBuildingTurret(int turretIndex)
+        {
+            if (selectedGridCell != null && selectedGridCell.IsEmpty())
+            {
+                // Hide the build menu
+                buildMenuUI.SetActive(false);
+
+                // Start coroutine to build the turret
+                StartCoroutine(BuildTurret(selectedGridCell, turretPrefabs[turretIndex]));
+            }
+        }
+
+        // Coroutine for building a turret over time
+        private IEnumerator BuildTurret(GridCell gridCell, GameObject turretPrefab)
+        {
+            // Simulate building time (e.g., wait for buildTime seconds)
+            yield return new WaitForSeconds(buildTime);
+
+            // Instantiate the turret on the grid cell after the build time
+            GameObject newTurret = Instantiate(turretPrefab, gridCell.transform.position, Quaternion.identity);
+            gridCell.SetTurret(newTurret);
         }
     }
 }

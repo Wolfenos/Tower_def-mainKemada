@@ -4,30 +4,42 @@ namespace KemadaTD
 {
     public class GridCell : MonoBehaviour
     {
-        private GameObject turret;
+        private GameObject turret; // The turret placed on this grid cell
+        private TurretBuilder turretBuilder; // Reference to the TurretBuilder
 
-        // Checks if this grid cell is empty
+        private void Start()
+        {
+            // Find the TurretBuilder in the scene (you could assign this manually in the Inspector as well)
+            turretBuilder = FindObjectOfType<TurretBuilder>();
+        }
+
         public bool IsEmpty()
         {
             return turret == null;
         }
 
-        // Sets the turret that occupies this grid cell
         public void SetTurret(GameObject newTurret)
         {
             turret = newTurret;
         }
 
-        // Gets the turret occupying this grid cell (if any)
         public GameObject GetTurret()
         {
             return turret;
         }
 
-        // Optionally, a method to check if a position is within this cell
-        public bool ContainsPosition(Vector3 position)
+        public bool HasTurret() // This method returns true if a turret is present
         {
-            return Vector3.Distance(position, transform.position) < 0.5f;
+            return turret != null;
+        }
+
+        // Detect when the player clicks on the grid cell
+        private void OnMouseDown()
+        {
+            if (IsEmpty())
+            {
+                turretBuilder.ShowBuildMenu(this); // Pass this grid cell to the TurretBuilder for the menu
+            }
         }
     }
 }
