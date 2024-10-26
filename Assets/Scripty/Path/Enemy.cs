@@ -13,16 +13,18 @@ namespace KemadaTD
         public Vector3 healthBarOffset = new Vector3(0, 2, 0);
 
         public float moveSpeed = 5f;
-        private float currentSpeedModifier = 1f; // Variable to store the current ground speed modifier
+        private float currentSpeedModifier = 1f;
         private Transform path;
         private Transform[] pathPoints;
         private int currentPointIndex = 0;
+        private float groundY;  // Fixed Y position based on ground level
 
         public void Initialize(float initialHealth, Transform enemyPath)
         {
             maxHealth = initialHealth;
             health = maxHealth;
 
+            // Set the path
             if (enemyPath != null)
             {
                 path = enemyPath;
@@ -33,6 +35,10 @@ namespace KemadaTD
                 }
             }
 
+            // Set ground Y position based on initial spawn point
+            groundY = transform.position.y;
+
+            // Instantiate and set up the health bar
             healthBarInstance = Instantiate(healthBarPrefab);
             healthBarSlider = healthBarInstance.GetComponentInChildren<Slider>();
             UpdateHealthBar();
@@ -52,6 +58,7 @@ namespace KemadaTD
             }
         }
 
+        // Method to move the enemy along the path while staying on ground level
         private void MoveAlongPath()
         {
             if (currentPointIndex >= pathPoints.Length)
@@ -62,9 +69,13 @@ namespace KemadaTD
             Transform targetPoint = pathPoints[currentPointIndex];
             Vector3 direction = (targetPoint.position - transform.position).normalized;
 
-            // Use modified speed based on ground
-            transform.Translate(direction * moveSpeed * currentSpeedModifier * Time.deltaTime, Space.World);
+            // Only modify the X and Z positions, keeping Y fixed to ground level
+            Vector3 newPosition = transform.position + direction * moveSpeed * currentSpeedModifier * Time.deltaTime;
+            newPosition.y = groundY;
 
+            transform.position = newPosition;
+
+            // Check if the enemy has reached the current point
             if (Vector3.Distance(transform.position, targetPoint.position) < 0.1f)
             {
                 currentPointIndex++;
@@ -104,7 +115,6 @@ namespace KemadaTD
             }
         }
 
-        // Detect ground effects when entering a new ground collider
         private void OnTriggerEnter(Collider other)
         {
             if (other.CompareTag("SlowGround") || other.CompareTag("NormalGround"))
@@ -117,12 +127,11 @@ namespace KemadaTD
             }
         }
 
-        // Reset speed modifier when leaving ground
         private void OnTriggerExit(Collider other)
         {
             if (other.CompareTag("SlowGround") || other.CompareTag("NormalGround"))
             {
-                currentSpeedModifier = 1f; // Reset to normal speed when leaving ground
+                currentSpeedModifier = 1f;
             }
         }
     }

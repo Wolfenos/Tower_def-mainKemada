@@ -84,11 +84,15 @@ namespace KemadaTD
                     {
                         Vector3 spawnPosition = pathWave.enemyPath.pathPoints[0].position;
 
-                        // Raycast downward to find the ground level
+                        // Apply upward offset to account for enemy pivot at center
+                        float yOffset = 1f; // Adjust based on the approximate height of the enemy
+                        spawnPosition.y += yOffset;
+
+                        // Raycast downward to confirm ground position
                         RaycastHit hit;
                         if (Physics.Raycast(spawnPosition + Vector3.up * 10f, Vector3.down, out hit, Mathf.Infinity))
                         {
-                            spawnPosition = hit.point; // Adjust spawn position to the hit point on the ground
+                            spawnPosition = hit.point + Vector3.up * yOffset; // Set to hit point + offset
                         }
                         else
                         {

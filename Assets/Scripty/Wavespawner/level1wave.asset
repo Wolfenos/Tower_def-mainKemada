@@ -25,4 +25,10 @@ MonoBehaviour:
     - {fileID: 31693450219235390, guid: 44db838a769032b4d820131b5e25a2d2, type: 3}
     enemyCounts: 32000000
     spawnInterval: 2
+  - enemyPath: {fileID: 3522581495311355578, guid: 3b1ab589ed35d2b4788c22ecf00b475b,
+      type: 3}
+    enemyTypes:
+    - {fileID: 31693450219235390, guid: 44db838a769032b4d820131b5e25a2d2, type: 3}
+    enemyCounts: 32000000
+    spawnInterval: 2
   waveDelay: 1
