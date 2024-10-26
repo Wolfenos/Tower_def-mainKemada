@@ -1,23 +1,30 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace KemadaTD
 {
     public class Enemy : MonoBehaviour
     {
-        public GameObject healthBarPrefab;  // Reference to health bar prefab (no health management inside)
-        public float moveSpeed = 5f;
+        public float maxHealth = 100f;
+        private float health;
+        public GameObject healthBarPrefab;
+        private GameObject healthBarInstance;
+        private Slider healthBarSlider;
+        public Vector3 healthBarOffset = new Vector3(0, 2, 0);
 
+        public float moveSpeed = 5f;
+        private float currentSpeedModifier = 1f;
         private Transform path;
         private Transform[] pathPoints;
         private int currentPointIndex = 0;
-        private float groundY;
-        private float currentSpeedModifier = 1f;
+        private float groundY;  // Fixed Y position based on ground level
 
-        private HealthBar healthBar;  // Reference to HealthBar component
-
-        // Initialize enemy with path and health bar setup
         public void Initialize(float initialHealth, Transform enemyPath)
         {
+            maxHealth = initialHealth;
+            health = maxHealth;
+
+            // Set the path
             if (enemyPath != null)
             {
                 path = enemyPath;
@@ -28,20 +35,13 @@ namespace KemadaTD
                 }
             }
 
+            // Set ground Y position based on initial spawn point
             groundY = transform.position.y;
 
-            // Instantiate the health bar and set it up
-            GameObject healthBarInstance = Instantiate(healthBarPrefab, transform.position, Quaternion.identity);
-            healthBar = healthBarInstance.GetComponent<HealthBar>();
-
-            if (healthBar != null)
-            {
-                healthBar.Initialize(initialHealth, transform);  // Pass the enemy's transform to HealthBar
-            }
-            else
-            {
-                Debug.LogError("HealthBar component missing from HealthBar prefab.");
-            }
+            // Instantiate and set up the health bar
+            healthBarInstance = Instantiate(healthBarPrefab);
+            healthBarSlider = healthBarInstance.GetComponentInChildren<Slider>();
+            UpdateHealthBar();
         }
 
         private void Update()
@@ -50,8 +50,15 @@ namespace KemadaTD
             {
                 MoveAlongPath();
             }
+
+            if (healthBarInstance != null)
+            {
+                healthBarInstance.transform.position = transform.position + healthBarOffset;
+                healthBarInstance.transform.LookAt(Camera.main.transform);
+            }
         }
 
+        // Method to move the enemy along the path while staying on ground level
         private void MoveAlongPath()
         {
             if (currentPointIndex >= pathPoints.Length)
@@ -61,23 +68,50 @@ namespace KemadaTD
 
             Transform targetPoint = pathPoints[currentPointIndex];
             Vector3 direction = (targetPoint.position - transform.position).normalized;
+
+            // Only modify the X and Z positions, keeping Y fixed to ground level
             Vector3 newPosition = transform.position + direction * moveSpeed * currentSpeedModifier * Time.deltaTime;
             newPosition.y = groundY;
 
             transform.position = newPosition;
 
+            // Check if the enemy has reached the current point
             if (Vector3.Distance(transform.position, targetPoint.position) < 0.1f)
             {
                 currentPointIndex++;
             }
         }
 
-        // Public method to deal damage to the enemy
         public void TakeDamage(float damageAmount)
         {
-            if (healthBar != null)
+            health -= damageAmount;
+            Debug.Log(gameObject.name + " took " + damageAmount + " damage. Remaining health: " + health);
+
+            UpdateHealthBar();
+
+            if (health <= 0f)
             {
-                healthBar.TakeDamage(damageAmount);  // Delegate to HealthBar without managing health directly
+                Die();
+            }
+        }
+
+        private void Die()
+        {
+            Debug.Log(gameObject.name + " has been destroyed!");
+
+            if (healthBarInstance != null)
+            {
+                Destroy(healthBarInstance);
+            }
+
+            Destroy(gameObject);
+        }
+
+        private void UpdateHealthBar()
+        {
+            if (healthBarSlider != null)
+            {
+                healthBarSlider.value = health / maxHealth;
             }
         }
 
