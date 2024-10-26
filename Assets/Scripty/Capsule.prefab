@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 31693450219235362}
   - component: {fileID: 31693450219235363}
   - component: {fileID: 31693450219235388}
+  - component: {fileID: 4643191056382302304}
   - component: {fileID: 6807268236847182992}
   - component: {fileID: 7025977063520462679}
   m_Layer: 0
@@ -115,9 +116,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 100
-  healthBarPrefab: {fileID: 2628252668593959421}
   healthBarOffset: {x: 0, y: 2, z: 0}
   moveSpeed: 5
+  damageNumberPrefab: {fileID: 0}
+  healthbar: {fileID: 2458772725531366533}
+--- !u!114 &4643191056382302304
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 31693450219235390}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b85af18cf064794fbd3694cd59184fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  healthSlider: {fileID: 7989793918412065901}
+  easeHealthSlider: {fileID: 7989793918667371862}
+  maxHealth: 100
 --- !u!114 &6807268236847182992
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -125,7 +142,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 31693450219235390}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7a224f74b9773fa43abf27566b79c486, type: 3}
   m_Name: 
@@ -133,6 +150,7 @@ MonoBehaviour:
   healthSlider: {fileID: 7989793918412065901}
   easeHealthSlider: {fileID: 7989793918667371862}
   lerpSpeed: 0.05
+  healthBarOffset: {x: 0, y: 2, z: 0}
 --- !u!114 &7025977063520462679
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -153,10 +171,60 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 31693450219235389}
     m_Modifications:
+    - target: {fileID: 3029519965424760162, guid: b69e5a4834d337449a33f023afee102d,
+        type: 3}
+      propertyPath: m_Value
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 3029519965424760162, guid: b69e5a4834d337449a33f023afee102d,
+        type: 3}
+      propertyPath: m_MaxValue
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 3029519965424760162, guid: b69e5a4834d337449a33f023afee102d,
+        type: 3}
+      propertyPath: m_Direction
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3029519965424760162, guid: b69e5a4834d337449a33f023afee102d,
+        type: 3}
+      propertyPath: m_WholeNumbers
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3029519965504513274, guid: b69e5a4834d337449a33f023afee102d,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3029519965504513274, guid: b69e5a4834d337449a33f023afee102d,
         type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3029519965504513274, guid: b69e5a4834d337449a33f023afee102d,
+        type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3029519965676964953, guid: b69e5a4834d337449a33f023afee102d,
+        type: 3}
+      propertyPath: m_Value
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 3029519965676964953, guid: b69e5a4834d337449a33f023afee102d,
+        type: 3}
+      propertyPath: m_MaxValue
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 3029519965676964953, guid: b69e5a4834d337449a33f023afee102d,
+        type: 3}
+      propertyPath: m_Direction
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3029519965676964953, guid: b69e5a4834d337449a33f023afee102d,
+        type: 3}
+      propertyPath: m_WholeNumbers
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3029519966219013161, guid: b69e5a4834d337449a33f023afee102d,
         type: 3}
@@ -166,6 +234,11 @@ PrefabInstance:
     - target: {fileID: 3029519966219013161, guid: b69e5a4834d337449a33f023afee102d,
         type: 3}
       propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3029519966219013161, guid: b69e5a4834d337449a33f023afee102d,
+        type: 3}
+      propertyPath: m_AnchorMin.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3118392120283441011, guid: b69e5a4834d337449a33f023afee102d,
@@ -280,12 +353,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b69e5a4834d337449a33f023afee102d, type: 3}
---- !u!1 &2628252668593959421 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6958935019530613193, guid: b69e5a4834d337449a33f023afee102d,
-    type: 3}
-  m_PrefabInstance: {fileID: 4965912824429019188}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &7989793918412065901 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3029519965676964953, guid: b69e5a4834d337449a33f023afee102d,
@@ -310,6 +377,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &7989793919162276294 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3029519967010183666, guid: b69e5a4834d337449a33f023afee102d,
+    type: 3}
+  m_PrefabInstance: {fileID: 4965912824429019188}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2458772725531366533
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7989793919162276294}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b85af18cf064794fbd3694cd59184fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  healthSlider: {fileID: 7989793918412065901}
+  easeHealthSlider: {fileID: 7989793918667371862}
+  maxHealth: 200
 --- !u!224 &8047007276729968455 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3118392120283441011, guid: b69e5a4834d337449a33f023afee102d,

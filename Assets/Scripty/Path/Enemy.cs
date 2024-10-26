@@ -1,5 +1,6 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace KemadaTD
 {
@@ -7,9 +8,6 @@ namespace KemadaTD
     {
         public float maxHealth = 100f;
         private float health;
-        public GameObject healthBarPrefab;
-        private GameObject healthBarInstance;
-        private Slider healthBarSlider;
         public Vector3 healthBarOffset = new Vector3(0, 2, 0);
 
         public float moveSpeed = 5f;
@@ -18,6 +16,10 @@ namespace KemadaTD
         private Transform[] pathPoints;
         private int currentPointIndex = 0;
         private float groundY;  // Fixed Y position based on ground level
+
+        // Reference to damage number manager
+        public GameObject damageNumberPrefab;
+        public Healthbarv2 healthbar; // Reference to Healthbarv2 script
 
         public void Initialize(float initialHealth, Transform enemyPath)
         {
@@ -38,10 +40,11 @@ namespace KemadaTD
             // Set ground Y position based on initial spawn point
             groundY = transform.position.y;
 
-            // Instantiate and set up the health bar
-            healthBarInstance = Instantiate(healthBarPrefab);
-            healthBarSlider = healthBarInstance.GetComponentInChildren<Slider>();
-            UpdateHealthBar();
+            // Initialize health bar
+            if (healthbar != null)
+            {
+                healthbar.UpdateHealth(health / maxHealth);
+            }
         }
 
         private void Update()
@@ -51,10 +54,10 @@ namespace KemadaTD
                 MoveAlongPath();
             }
 
-            if (healthBarInstance != null)
+            if (healthbar != null)
             {
-                healthBarInstance.transform.position = transform.position + healthBarOffset;
-                healthBarInstance.transform.LookAt(Camera.main.transform);
+                healthbar.transform.position = transform.position + healthBarOffset;
+                healthbar.transform.LookAt(Camera.main.transform);
             }
         }
 
@@ -85,9 +88,15 @@ namespace KemadaTD
         public void TakeDamage(float damageAmount)
         {
             health -= damageAmount;
+            health = Mathf.Clamp(health, 0, maxHealth); // Ensure health is clamped between 0 and maxHealth
             Debug.Log(gameObject.name + " took " + damageAmount + " damage. Remaining health: " + health);
 
-            UpdateHealthBar();
+            if (healthbar != null)
+            {
+                healthbar.UpdateHealth(health / maxHealth);
+            }
+
+            ShowDamageNumber(damageAmount);
 
             if (health <= 0f)
             {
@@ -99,21 +108,25 @@ namespace KemadaTD
         {
             Debug.Log(gameObject.name + " has been destroyed!");
 
-            if (healthBarInstance != null)
+            // Add money to the player when enemy dies
+            FinanceManager financeManager = FindObjectOfType<FinanceManager>();
+            if (financeManager != null)
             {
-                Destroy(healthBarInstance);
+                financeManager.AddMoney();
+            }
+            else
+            {
+                Debug.LogWarning("FinanceManager not found in the scene!");
+            }
+
+            if (healthbar != null)
+            {
+                Destroy(healthbar.gameObject);
             }
 
             Destroy(gameObject);
         }
 
-        private void UpdateHealthBar()
-        {
-            if (healthBarSlider != null)
-            {
-                healthBarSlider.value = health / maxHealth;
-            }
-        }
 
         private void OnTriggerEnter(Collider other)
         {
@@ -132,6 +145,19 @@ namespace KemadaTD
             if (other.CompareTag("SlowGround") || other.CompareTag("NormalGround"))
             {
                 currentSpeedModifier = 1f;
+            }
+        }
+
+        private void ShowDamageNumber(float damageAmount)
+        {
+            if (damageNumberPrefab != null)
+            {
+                GameObject damageNumber = Instantiate(damageNumberPrefab, transform.position + Vector3.up * 2, Quaternion.identity);
+                DamageNumber damageNumberScript = damageNumber.GetComponent<DamageNumber>();
+                if (damageNumberScript != null)
+                {
+                    damageNumberScript.SetDamage(damageAmount);
+                }
             }
         }
     }
