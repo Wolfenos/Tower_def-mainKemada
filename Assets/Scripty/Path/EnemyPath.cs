@@ -1,44 +1,28 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace KemadaTD
 {
     public class EnemyPath : MonoBehaviour
     {
-        public string pathPointTag = "PathPoint";    // Tag used to find path points
-        public List<PathPoint> pathPoints = new List<PathPoint>(); // List of PathPoint objects along the path
-
-        private void Awake()
-        {
-            // Find all GameObjects tagged as path points and add them to pathPoints list
-            GameObject[] points = GameObject.FindGameObjectsWithTag(pathPointTag);
-
-            foreach (GameObject point in points)
-            {
-                PathPoint pathPoint = point.GetComponent<PathPoint>();
-                if (pathPoint != null)
-                {
-                    pathPoints.Add(pathPoint);
-                }
-            }
-        }
+        // List to manually assign path points in the Inspector
+        public List<Transform> pathPoints = new List<Transform>();
 
         // Method to get the positions of all path points as a list of Vector3 positions
         public List<Vector3> GetPathPositions()
         {
             List<Vector3> positions = new List<Vector3>();
-            foreach (PathPoint point in pathPoints)
+            foreach (Transform point in pathPoints)
             {
                 if (point != null)
                 {
-                    positions.Add(point.transform.position);
+                    positions.Add(point.position);
                 }
             }
             return positions;
         }
 
-        // Change access modifier to public so it can be accessed by PathManager
+        // Draws lines between path points in the Unity Editor for easy visualization
         public void OnDrawGizmos()
         {
             if (pathPoints == null || pathPoints.Count < 2)
@@ -50,7 +34,7 @@ namespace KemadaTD
             {
                 if (pathPoints[i] != null && pathPoints[i + 1] != null)
                 {
-                    Gizmos.DrawLine(pathPoints[i].transform.position, pathPoints[i + 1].transform.position);
+                    Gizmos.DrawLine(pathPoints[i].position, pathPoints[i + 1].position);
                 }
             }
         }
