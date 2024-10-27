@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,14 +6,22 @@ public class PlayerController : MonoBehaviour
 {
     public float cameraDragSpeed = 5f; // Rychlost posunu kamery
     public float cameraRotateSpeed = 100f; // Rychlost rotace kamery
-    public float zoomSpeed = 5f; // Rychlost pøiblíení a oddálení
-    public Transform rotationPoint; // Bod rotace kamery (mùeš ho pøiøadit v Inspectoru)
+    public float zoomSpeed = 5f; // Rychlost pÅ™iblÃ­Å¾enÃ­ a oddÃ¡lenÃ­
+    public Transform rotationPoint; // Bod rotace kamery (mÅ¯Å¾eÅ¡ ho pÅ™iÅ™adit v Inspectoru)
 
-    private Vector3 dragOrigin; // Pozice myši pøi zaèátku taení
+    [Header("Camera Movement Boundaries")]
+    public float minX = -50f;
+    public float maxX = 50f;
+    public float minY = 5f;
+    public float maxY = 50f;
+    public float minZ = -50f;
+    public float maxZ = 50f;
+
+    private Vector3 dragOrigin; // Pozice myÅ¡i pÅ™i zaÄÃ¡tku taÅ¾enÃ­
 
     void Update()
     {
-        // Kontrola kliknutí levım tlaèítkem myši
+        // Kontrola kliknutÃ­ levÃ½m tlaÄÃ­tkem myÅ¡i
         if (Input.GetMouseButtonDown(0))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -21,68 +29,74 @@ public class PlayerController : MonoBehaviour
 
             if (Physics.Raycast(ray, out hit))
             {
-                // Detekce kliknutí na objekt
                 Debug.Log("Kliknuto na objekt: " + hit.transform.name);
             }
             else
             {
-                Debug.Log("Raycast nedetekoval ádnı objekt.");
+                Debug.Log("Raycast nedetekoval Å¾Ã¡dnÃ½ objekt.");
             }
         }
 
-        // Rotace kamery pomocí prostøedního tlaèítka myši
-        if (Input.GetMouseButton(2)) // 2 je prostøední tlaèítko myši
+        // Rotace kamery pomocÃ­ prostÅ™ednÃ­ho tlaÄÃ­tka myÅ¡i
+        if (Input.GetMouseButton(2))
         {
             float rotateX = Input.GetAxis("Mouse X") * cameraRotateSpeed * Time.deltaTime;
             float rotateY = Input.GetAxis("Mouse Y") * cameraRotateSpeed * Time.deltaTime;
 
-            // Rotuj kolem bodu
             Camera.main.transform.RotateAround(rotationPoint.position, Vector3.up, rotateX); // Rotace kolem Y osy
             Camera.main.transform.RotateAround(rotationPoint.position, Camera.main.transform.right, -rotateY); // Rotace kolem X osy
         }
 
-        // Pohyb kamery pomocí W, A, S, D
-        float moveHorizontal = Input.GetAxis("Horizontal"); // A, D
-        float moveVertical = Input.GetAxis("Vertical"); // W, S
+        // Pohyb kamery pomocÃ­ W, A, S, D
+        float moveHorizontal = Input.GetAxis("Horizontal");
+        float moveVertical = Input.GetAxis("Vertical");
 
-        // Urèení smìru pohybu na základì orientace kamery
-        Vector3 forward = Camera.main.transform.forward; // Vektor smìøující vpøed
-        Vector3 right = Camera.main.transform.right; // Vektor smìøující vpravo
+        Vector3 forward = Camera.main.transform.forward;
+        Vector3 right = Camera.main.transform.right;
 
-        forward.y = 0; // Zabráníme, aby pohyb byl vertikální
-        right.y = 0; // Zabráníme, aby pohyb byl vertikální
-        forward.Normalize(); // Normalizace vektoru vpøed
-        right.Normalize(); // Normalizace vektoru vpravo
+        forward.y = 0;
+        right.y = 0;
+        forward.Normalize();
+        right.Normalize();
 
-        // Vypoètení celkového pohybu na základì W, A, S, D
         Vector3 move = (forward * moveVertical + right * moveHorizontal) * cameraDragSpeed * Time.deltaTime;
+        Vector3 newPosition = Camera.main.transform.position + move;
 
-        // Posun kamery
-        Camera.main.transform.position += move;
+        // Apply boundary limits (including Y axis)
+        newPosition.x = Mathf.Clamp(newPosition.x, minX, maxX);
+        newPosition.y = Mathf.Clamp(newPosition.y, minY, maxY);
+        newPosition.z = Mathf.Clamp(newPosition.z, minZ, maxZ);
 
-        // Zoomování kamery pomocí scrollování myši
-        float scrollInput = Input.GetAxis("Mouse ScrollWheel"); // Získání hodnoty scrollu
-        Camera.main.transform.position += Camera.main.transform.forward * scrollInput * zoomSpeed; // Pøiblíení a oddálení
+        Camera.main.transform.position = newPosition;
 
-        // Kamera se zaène hıbat, kdy podrí pravé tlaèítko myši
+        // ZoomovÃ¡nÃ­ kamery pomocÃ­ scrollovÃ¡nÃ­ myÅ¡i
+        float scrollInput = Input.GetAxis("Mouse ScrollWheel");
+        Vector3 zoomPosition = Camera.main.transform.position + Camera.main.transform.forward * scrollInput * zoomSpeed;
+
+        // Apply boundary limits for zoom as well
+        zoomPosition.y = Mathf.Clamp(zoomPosition.y, minY, maxY);
+        Camera.main.transform.position = zoomPosition;
+
         if (Input.GetMouseButtonDown(1))
         {
             dragOrigin = Input.mousePosition;
             return;
         }
 
-        // Kamera se posouvá, pokud dríme pravé tlaèítko myši
         if (Input.GetMouseButton(1))
         {
             Vector3 difference = Camera.main.ScreenToViewportPoint(dragOrigin - Input.mousePosition);
-
-            // Pouze pohyb ve smìru X a Z (horizontální pohyb)
             Vector3 moveDrag = new Vector3(difference.x * cameraDragSpeed, 0, difference.y * cameraDragSpeed);
+            Vector3 newDragPosition = Camera.main.transform.position + new Vector3(moveDrag.x, 0, moveDrag.z);
 
-            // Posun kamery bez zmìny osy Y (vıška kamery zùstane stejná)
-            Camera.main.transform.position += new Vector3(moveDrag.x, 0, moveDrag.z);
+            // Apply boundary limits for drag movement
+            newDragPosition.x = Mathf.Clamp(newDragPosition.x, minX, maxX);
+            newDragPosition.y = Mathf.Clamp(newDragPosition.y, minY, maxY);
+            newDragPosition.z = Mathf.Clamp(newDragPosition.z, minZ, maxZ);
 
-            dragOrigin = Input.mousePosition; // Aktualizace drag origin, aby pohyb byl plynulı
+            Camera.main.transform.position = newDragPosition;
+
+            dragOrigin = Input.mousePosition;
         }
     }
 }

@@ -7,16 +7,17 @@ TagManager:
   - Enemy
   - PathPoint
   - NormalGround
+  - Border
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Ground
   - Water
   - UI
-  - 
+  - Border
   - Base_rotace
-  - 
+  - Camera
   - Post-process
   - 
   - 
