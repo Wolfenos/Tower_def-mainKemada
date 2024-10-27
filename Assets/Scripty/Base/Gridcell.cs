@@ -4,41 +4,45 @@ namespace KemadaTD
 {
     public class GridCell : MonoBehaviour
     {
-        private GameObject turret; // The turret placed on this grid cell
-        private TurretBuilder turretBuilder; // Reference to the TurretBuilder
+        private GameObject currentTurret; // Holds a reference to the turret placed on this cell, if any
 
-        private void Start()
-        {
-            // Find the TurretBuilder in the scene (you could assign this manually in the Inspector as well)
-            turretBuilder = FindObjectOfType<TurretBuilder>();
-        }
-
+        // Checks if the cell is currently empty
         public bool IsEmpty()
         {
-            return turret == null;
+            return currentTurret == null;
         }
 
-        public void SetTurret(GameObject newTurret)
-        {
-            turret = newTurret;
-        }
-
-        public GameObject GetTurret()
-        {
-            return turret;
-        }
-
-        public bool HasTurret() // This method returns true if a turret is present
-        {
-            return turret != null;
-        }
-
-        // Detect when the player clicks on the grid cell
-        private void OnMouseDown()
+        // Sets a turret on this cell and marks it as occupied
+        public void SetTurret(GameObject turret)
         {
             if (IsEmpty())
             {
-                turretBuilder.ShowBuildMenu(this); // Pass this grid cell to the TurretBuilder for the menu
+                currentTurret = turret;
+            }
+            else
+            {
+                Debug.LogWarning("Attempted to place a turret on an occupied cell.");
+            }
+        }
+
+        // Optional: Method to remove the turret from this cell, if needed
+        public void ClearTurret()
+        {
+            if (currentTurret != null)
+            {
+                Destroy(currentTurret);
+                currentTurret = null;
+            }
+        }
+
+        // Visual feedback for selecting or deselecting the cell (e.g., highlighting)
+        public void HighlightCell(bool isHighlighted)
+        {
+            // Implement a visual effect like changing the material or color when highlighted
+            Renderer renderer = GetComponent<Renderer>();
+            if (renderer != null)
+            {
+                renderer.material.color = isHighlighted ? Color.green : Color.white; // Example highlight color
             }
         }
     }

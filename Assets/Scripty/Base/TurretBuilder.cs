@@ -1,75 +1,95 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace KemadaTD
 {
     public class TurretBuilder : MonoBehaviour
     {
-        // Turret prefabs that can be selected (assigned in the Inspector)
-        public GameObject[] turretPrefabs;
-        public int maxTurretsInMenu = 3; // Control how many turrets can appear in the build menu
+        [Header("Ghost Turret")]
+        public GameObject ghostTurretPrefab;  // The prefab for the ghost version of the turret
+        private GameObject ghostTurretInstance;
 
-        // UI elements for building
-        public GameObject buildMenuUI; // The UI panel for the turret selection menu
-        public Button[] turretButtons; // Buttons for selecting turrets
-        public float buildTime = 3f; // Time it takes to build a turret (editable in the Inspector)
+        private GridCell selectedGridCell;
+        private TurretManager turretManager;
 
-        private GridCell selectedGridCell; // The currently selected grid cell
+        private Camera mainCamera;
 
         private void Start()
         {
-            // Initially hide the build menu
-            buildMenuUI.SetActive(false);
+            mainCamera = Camera.main;
+            turretManager = GetComponent<TurretManager>();
+            SpawnGhostTurret();
         }
 
-        // Show the build menu when a grid cell is clicked
-        public void ShowBuildMenu(GridCell gridCell)
+        private void Update()
         {
-            selectedGridCell = gridCell;
-
-            // Enable only the buttons for available turrets
-            for (int i = 0; i < turretButtons.Length; i++)
+            UpdateGhostTurretPosition();
+            if (Input.GetMouseButtonDown(0) && selectedGridCell != null && selectedGridCell.IsEmpty())
             {
-                if (i < turretPrefabs.Length && i < maxTurretsInMenu)
+                int turretIndex = 0; // Assign the index you want to build, or pass it dynamically as needed
+                BuildTurret(selectedGridCell, turretManager.GetTurretPrefab(turretIndex));
+            }
+        }
+
+
+        private void SpawnGhostTurret()
+        {
+            // Instantiate a ghost turret at the start
+            if (ghostTurretPrefab != null)
+            {
+                ghostTurretInstance = Instantiate(ghostTurretPrefab);
+                ghostTurretInstance.SetActive(false); // Hide initially
+            }
+        }
+
+        private void UpdateGhostTurretPosition()
+        {
+            if (ghostTurretInstance == null) return;
+
+            Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out RaycastHit hit))
+            {
+                Vector3 targetPosition = hit.point;
+
+                // Snap to grid position based on your grid system
+                selectedGridCell = GetGridCellAtPosition(targetPosition);
+                if (selectedGridCell != null)
                 {
-                    turretButtons[i].gameObject.SetActive(true);
-                    int turretIndex = i; // Capture the correct index for the turret
-                    turretButtons[i].onClick.RemoveAllListeners(); // Clear any existing listeners
-                    turretButtons[i].onClick.AddListener(() => StartBuildingTurret(turretIndex));
+                    ghostTurretInstance.SetActive(true);
+                    bool isBuildable = selectedGridCell.IsEmpty();
+                    ghostTurretInstance.GetComponent<GhostTurret>().UpdatePosition(selectedGridCell.transform.position, isBuildable);
                 }
                 else
                 {
-                    turretButtons[i].gameObject.SetActive(false); // Disable unused buttons
+                    ghostTurretInstance.SetActive(false);
                 }
             }
-
-            // Show the menu UI
-            buildMenuUI.SetActive(true);
         }
 
-        // Start the process of building a turret
-        private void StartBuildingTurret(int turretIndex)
+        private GridCell GetGridCellAtPosition(Vector3 position)
         {
-            if (selectedGridCell != null && selectedGridCell.IsEmpty())
-            {
-                // Hide the build menu
-                buildMenuUI.SetActive(false);
+            // Implement your logic to get the closest grid cell at a specific position
+            return /* code to get the closest grid cell */;
+        }
 
-                // Start coroutine to build the turret
-                StartCoroutine(BuildTurret(selectedGridCell, turretPrefabs[turretIndex]));
+        // Public method for TurretManager to call directly
+        public void BuildTurret(GridCell gridCell, GameObject turretPrefab)
+        {
+            if (gridCell != null && gridCell.IsEmpty())
+            {
+                StartCoroutine(BuildTurretCoroutine(gridCell, turretPrefab));
+                selectedGridCell = null;  // Clear selection after building
             }
         }
 
-        // Coroutine for building a turret over time
-        private IEnumerator BuildTurret(GridCell gridCell, GameObject turretPrefab)
+        private IEnumerator BuildTurretCoroutine(GridCell gridCell, GameObject turretPrefab)
         {
-            // Simulate building time (e.g., wait for buildTime seconds)
-            yield return new WaitForSeconds(buildTime);
+            yield return new WaitForSeconds(0.5f);  // Optional: slight delay
 
-            // Instantiate the turret on the grid cell after the build time
             GameObject newTurret = Instantiate(turretPrefab, gridCell.transform.position, Quaternion.identity);
             gridCell.SetTurret(newTurret);
+
+            ghostTurretInstance.SetActive(false);  // Hide ghost after placing
         }
     }
 }

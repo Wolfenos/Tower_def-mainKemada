@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,14 +6,20 @@ public class PlayerController : MonoBehaviour
 {
     public float cameraDragSpeed = 5f; // Rychlost posunu kamery
     public float cameraRotateSpeed = 100f; // Rychlost rotace kamery
-    public float zoomSpeed = 5f; // Rychlost pøiblíení a oddálení
-    public Transform rotationPoint; // Bod rotace kamery (mùeš ho pøiøadit v Inspectoru)
+    public float zoomSpeed = 5f; // Rychlost pÅ™iblÃ­Å¾enÃ­ a oddÃ¡lenÃ­
+    public Transform rotationPoint; // Bod rotace kamery (mÅ¯Å¾eÅ¡ ho pÅ™iÅ™adit v Inspectoru)
 
-    private Vector3 dragOrigin; // Pozice myši pøi zaèátku taení
+    // Definice hranic, aby byly nastavitelnÃ© v Inspectoru
+    [Header("Boundary Settings")]
+    public Vector2 xBounds = new Vector2(-50f, 50f); // MinimÃ¡lnÃ­ a maximÃ¡lnÃ­ hodnota pro osu X
+    public Vector2 zBounds = new Vector2(-50f, 50f); // MinimÃ¡lnÃ­ a maximÃ¡lnÃ­ hodnota pro osu Z
+    public Vector2 yBounds = new Vector2(10f, 50f);  // MinimÃ¡lnÃ­ a maximÃ¡lnÃ­ hodnota pro osu Y (pro omezenÃ­ vÃ½Å¡ky kamery)
+
+    private Vector3 dragOrigin; // Pozice myÅ¡i pÅ™i zaÄÃ¡tku taÅ¾enÃ­
 
     void Update()
     {
-        // Kontrola kliknutí levım tlaèítkem myši
+        // Kontrola kliknutÃ­ levÃ½m tlaÄÃ­tkem myÅ¡i
         if (Input.GetMouseButtonDown(0))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -21,17 +27,17 @@ public class PlayerController : MonoBehaviour
 
             if (Physics.Raycast(ray, out hit))
             {
-                // Detekce kliknutí na objekt
+                // Detekce kliknutÃ­ na objekt
                 Debug.Log("Kliknuto na objekt: " + hit.transform.name);
             }
             else
             {
-                Debug.Log("Raycast nedetekoval ádnı objekt.");
+                Debug.Log("Raycast nedetekoval Å¾Ã¡dnÃ½ objekt.");
             }
         }
 
-        // Rotace kamery pomocí prostøedního tlaèítka myši
-        if (Input.GetMouseButton(2)) // 2 je prostøední tlaèítko myši
+        // Rotace kamery pomocÃ­ prostÅ™ednÃ­ho tlaÄÃ­tka myÅ¡i
+        if (Input.GetMouseButton(2)) // 2 je prostÅ™ednÃ­ tlaÄÃ­tko myÅ¡i
         {
             float rotateX = Input.GetAxis("Mouse X") * cameraRotateSpeed * Time.deltaTime;
             float rotateY = Input.GetAxis("Mouse Y") * cameraRotateSpeed * Time.deltaTime;
@@ -41,48 +47,56 @@ public class PlayerController : MonoBehaviour
             Camera.main.transform.RotateAround(rotationPoint.position, Camera.main.transform.right, -rotateY); // Rotace kolem X osy
         }
 
-        // Pohyb kamery pomocí W, A, S, D
+        // Pohyb kamery pomocÃ­ W, A, S, D
         float moveHorizontal = Input.GetAxis("Horizontal"); // A, D
         float moveVertical = Input.GetAxis("Vertical"); // W, S
 
-        // Urèení smìru pohybu na základì orientace kamery
-        Vector3 forward = Camera.main.transform.forward; // Vektor smìøující vpøed
-        Vector3 right = Camera.main.transform.right; // Vektor smìøující vpravo
+        // UrÄenÃ­ smÄ›ru pohybu na zÃ¡kladÄ› orientace kamery
+        Vector3 forward = Camera.main.transform.forward; // Vektor smÄ›Å™ujÃ­cÃ­ vpÅ™ed
+        Vector3 right = Camera.main.transform.right; // Vektor smÄ›Å™ujÃ­cÃ­ vpravo
 
-        forward.y = 0; // Zabráníme, aby pohyb byl vertikální
-        right.y = 0; // Zabráníme, aby pohyb byl vertikální
-        forward.Normalize(); // Normalizace vektoru vpøed
+        forward.y = 0; // ZabrÃ¡nÃ­me, aby pohyb byl vertikÃ¡lnÃ­
+        right.y = 0; // ZabrÃ¡nÃ­me, aby pohyb byl vertikÃ¡lnÃ­
+        forward.Normalize(); // Normalizace vektoru vpÅ™ed
         right.Normalize(); // Normalizace vektoru vpravo
 
-        // Vypoètení celkového pohybu na základì W, A, S, D
+        // VypoÄtenÃ­ celkovÃ©ho pohybu na zÃ¡kladÄ› W, A, S, D
         Vector3 move = (forward * moveVertical + right * moveHorizontal) * cameraDragSpeed * Time.deltaTime;
 
         // Posun kamery
         Camera.main.transform.position += move;
 
-        // Zoomování kamery pomocí scrollování myši
-        float scrollInput = Input.GetAxis("Mouse ScrollWheel"); // Získání hodnoty scrollu
-        Camera.main.transform.position += Camera.main.transform.forward * scrollInput * zoomSpeed; // Pøiblíení a oddálení
+        // ZoomovÃ¡nÃ­ kamery pomocÃ­ scrollovÃ¡nÃ­ myÅ¡i
+        float scrollInput = Input.GetAxis("Mouse ScrollWheel"); // ZÃ­skÃ¡nÃ­ hodnoty scrollu
+        Camera.main.transform.position += Camera.main.transform.forward * scrollInput * zoomSpeed; // PÅ™iblÃ­Å¾enÃ­ a oddÃ¡lenÃ­
 
-        // Kamera se zaène hıbat, kdy podrí pravé tlaèítko myši
+        // Kamera se zaÄne hÃ½bat, kdyÅ¾ podrÅ¾Ã­ pravÃ© tlaÄÃ­tko myÅ¡i
         if (Input.GetMouseButtonDown(1))
         {
             dragOrigin = Input.mousePosition;
             return;
         }
 
-        // Kamera se posouvá, pokud dríme pravé tlaèítko myši
+        // Kamera se posouvÃ¡, pokud drÅ¾Ã­me pravÃ© tlaÄÃ­tko myÅ¡i
         if (Input.GetMouseButton(1))
         {
             Vector3 difference = Camera.main.ScreenToViewportPoint(dragOrigin - Input.mousePosition);
 
-            // Pouze pohyb ve smìru X a Z (horizontální pohyb)
+            // Pouze pohyb ve smÄ›ru X a Z (horizontÃ¡lnÃ­ pohyb)
             Vector3 moveDrag = new Vector3(difference.x * cameraDragSpeed, 0, difference.y * cameraDragSpeed);
 
-            // Posun kamery bez zmìny osy Y (vıška kamery zùstane stejná)
+            // Posun kamery bez zmÄ›ny osy Y (vÃ½Å¡ka kamery zÅ¯stane stejnÃ¡)
             Camera.main.transform.position += new Vector3(moveDrag.x, 0, moveDrag.z);
 
-            dragOrigin = Input.mousePosition; // Aktualizace drag origin, aby pohyb byl plynulı
+            dragOrigin = Input.mousePosition; // Aktualizace drag origin, aby pohyb byl plynulÃ½
         }
+
+        // Omezit pozici kamery v hranicÃ­ch
+        Vector3 clampedPosition = Camera.main.transform.position;
+        clampedPosition.x = Mathf.Clamp(clampedPosition.x, xBounds.x, xBounds.y);
+        clampedPosition.y = Mathf.Clamp(clampedPosition.y, yBounds.x, yBounds.y);
+        clampedPosition.z = Mathf.Clamp(clampedPosition.z, zBounds.x, zBounds.y);
+
+        Camera.main.transform.position = clampedPosition;
     }
 }
