@@ -8,7 +8,8 @@ namespace KemadaTD
         public float fireRate = 1f;           // Fire rate (shots per second)
         public float damage = 20f;            // Damage per shot
         public GameObject bulletPrefab;       // Prefab for the bullet
-        public Transform firePoint;           // Where the bullets are fired from
+        public Transform[] firePoints;        // Array of points where the bullets are fired from
+        public Transform rotatingPart;        // Part of the turret that will rotate towards the target
         public bool canShoot = true;          // Flag to check if turret can shoot
 
         private Transform target;             // Current target
@@ -31,6 +32,9 @@ namespace KemadaTD
             if (target == null || !canShoot || turretAmmo == null)
                 return;
 
+            // Rotate turret towards the target
+            RotateTowardsTarget();
+
             // Check fire cooldown and ammo
             if (fireCountdown <= 0f && turretAmmo.UseAmmo()) // Use ammo and only shoot if there is ammo
             {
@@ -41,14 +45,29 @@ namespace KemadaTD
             fireCountdown -= Time.deltaTime; // Decrease cooldown
         }
 
+        private void RotateTowardsTarget()
+        {
+            if (target == null || rotatingPart == null)
+                return;
+
+            // Calculate the direction to the target
+            Vector3 direction = target.position - rotatingPart.position;
+            Quaternion lookRotation = Quaternion.LookRotation(direction);
+            Vector3 rotation = Quaternion.Lerp(rotatingPart.rotation, lookRotation, Time.deltaTime * 5f).eulerAngles;
+            rotatingPart.rotation = Quaternion.Euler(0f, rotation.y, 0f); // Rotate only on the Y-axis
+        }
+
         private void Shoot()
         {
-            // Instantiate the bullet and set its target
-            GameObject bulletGO = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
-            Bullet bullet = bulletGO.GetComponent<Bullet>();
-            if (bullet != null)
+            // Instantiate bullets from all fire points
+            foreach (Transform firePoint in firePoints)
             {
-                bullet.Seek(target, damage); // Pass target and damage to the bullet
+                GameObject bulletGO = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
+                Bullet bullet = bulletGO.GetComponent<Bullet>();
+                if (bullet != null)
+                {
+                    bullet.Seek(target, damage); // Pass target and damage to the bullet
+                }
             }
         }
 
@@ -88,4 +107,3 @@ namespace KemadaTD
         }
     }
 }
-
