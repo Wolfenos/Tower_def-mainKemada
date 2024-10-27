@@ -15,28 +15,20 @@ namespace KemadaTD
         private Transform target;             // Current target
         private float fireCountdown = 0f;     // Countdown for next shot
 
-        private TurretAmmo turretAmmo;        // Reference to TurretAmmo script
-
-        private void Start()
-        {
-            // Get reference to the TurretAmmo component
-            turretAmmo = GetComponent<TurretAmmo>();
-        }
-
         private void Update()
         {
             // Update the current target
             UpdateTarget();
 
             // If no target or cannot shoot, return early
-            if (target == null || !canShoot || turretAmmo == null)
+            if (target == null || !canShoot)
                 return;
 
             // Rotate turret towards the target
             RotateTowardsTarget();
 
-            // Check fire cooldown and ammo
-            if (fireCountdown <= 0f && turretAmmo.UseAmmo()) // Use ammo and only shoot if there is ammo
+            // Check fire cooldown
+            if (fireCountdown <= 0f) // Shoot if cooldown is complete
             {
                 Shoot();
                 fireCountdown = 1f / fireRate; // Reset fire cooldown
@@ -53,7 +45,7 @@ namespace KemadaTD
             // Calculate the direction to the target
             Vector3 direction = target.position - rotatingPart.position;
             Quaternion lookRotation = Quaternion.LookRotation(direction);
-            Vector3 rotation = Quaternion.Lerp(rotatingPart.rotation, lookRotation, Time.deltaTime * 5f).eulerAngles;
+            Vector3 rotation = Quaternion.Lerp(rotatingPart.rotation, lookRotation, Time.deltaTime * 10f).eulerAngles;
             rotatingPart.rotation = Quaternion.Euler(0f, rotation.y, 0f); // Rotate only on the Y-axis
         }
 

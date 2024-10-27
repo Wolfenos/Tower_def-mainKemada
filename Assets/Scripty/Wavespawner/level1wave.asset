@@ -16,7 +16,7 @@ MonoBehaviour:
   - enemyPath: {fileID: 4619777747977312909, guid: 4a39af7dbd61a454bb6453ac3e2fb080,
       type: 3}
     enemyTypes:
-    - {fileID: 4100235824935173217, guid: fcab5ce4a8d3da14f8e0a62926bb2ac7, type: 3}
+    - {fileID: 31693450219235390, guid: 44db838a769032b4d820131b5e25a2d2, type: 3}
     - {fileID: 741403481047729891, guid: b9c6a1b1bb9e66d48a762b5cf73e0b5e, type: 3}
     enemyCounts: 32000000
     spawnInterval: 2
