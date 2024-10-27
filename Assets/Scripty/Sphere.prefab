@@ -13,10 +13,11 @@ GameObject:
   - component: {fileID: 741403481047729894}
   - component: {fileID: 741403481047729895}
   - component: {fileID: 2966688668684922131}
+  - component: {fileID: 1434131516377400879}
   - component: {fileID: 741403481047729893}
   m_Layer: 0
   m_Name: Sphere
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -107,7 +108,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 741403481047729891}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7a224f74b9773fa43abf27566b79c486, type: 3}
   m_Name: 
@@ -116,6 +117,21 @@ MonoBehaviour:
   easeHealthSlider: {fileID: 2324696138971204679}
   lerpSpeed: 0.05
   healthBarOffset: {x: 0, y: 2, z: 0}
+--- !u!114 &1434131516377400879
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 741403481047729891}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b85af18cf064794fbd3694cd59184fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  healthSlider: {fileID: 2324696138719982972}
+  easeHealthSlider: {fileID: 2324696138971204679}
+  maxHealth: 100
 --- !u!114 &741403481047729893
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -128,8 +144,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 564ca059c3dac78409d861d774fb3d5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  healthBarPrefab: {fileID: 7699717263521515756}
+  maxHealth: 100
+  healthBarOffset: {x: 0, y: 2, z: 0}
   moveSpeed: 5
+  damageNumberPrefab: {fileID: 0}
+  healthbar: {fileID: 3937022370571205639}
 --- !u!1001 &741403481616775461
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -137,6 +156,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 741403481047729890}
     m_Modifications:
+    - target: {fileID: 3029519965424760162, guid: b69e5a4834d337449a33f023afee102d,
+        type: 3}
+      propertyPath: m_Value
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 3029519965504513274, guid: b69e5a4834d337449a33f023afee102d,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3029519965504513274, guid: b69e5a4834d337449a33f023afee102d,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -264,6 +293,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b69e5a4834d337449a33f023afee102d, type: 3}
+--- !u!1 &2324696138409124055 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3029519967010183666, guid: b69e5a4834d337449a33f023afee102d,
+    type: 3}
+  m_PrefabInstance: {fileID: 741403481616775461}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &3937022370571205639
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2324696138409124055}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b85af18cf064794fbd3694cd59184fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  healthSlider: {fileID: 2324696138719982972}
+  easeHealthSlider: {fileID: 2324696138971204679}
+  maxHealth: 100
 --- !u!114 &2324696138719982972 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3029519965676964953, guid: b69e5a4834d337449a33f023afee102d,
@@ -291,12 +341,6 @@ MonoBehaviour:
 --- !u!224 &2382192638475263574 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3118392120283441011, guid: b69e5a4834d337449a33f023afee102d,
-    type: 3}
-  m_PrefabInstance: {fileID: 741403481616775461}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &7699717263521515756 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6958935019530613193, guid: b69e5a4834d337449a33f023afee102d,
     type: 3}
   m_PrefabInstance: {fileID: 741403481616775461}
   m_PrefabAsset: {fileID: 0}
