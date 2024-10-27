@@ -4,89 +4,80 @@ namespace KemadaTD
 {
     public class CircleController : MonoBehaviour
     {
+        // Custom key bindings for each circle (set in Inspector)
         [System.Serializable]
         public class CircleInput
         {
             public Transform circle; // Reference to the circle object
-            public Renderer renderer; // Renderer to change material for highlighting
-            public Material defaultMaterial; // Default material
-            public Material highlightMaterial; // Highlight material
+            public KeyCode rotateLeftKey = KeyCode.LeftArrow;  // Key to rotate left
+            public KeyCode rotateRightKey = KeyCode.RightArrow; // Key to rotate right
         }
 
-        public CircleInput[] circles; // Array of circles in the scene
-
-        // Controls (configurable in the Inspector)
-        public KeyCode switchRingKey = KeyCode.Tab; // Key to switch between rings
-        public KeyCode rotateLeftKey = KeyCode.LeftArrow;  // Key to rotate selected ring left
-        public KeyCode rotateRightKey = KeyCode.RightArrow; // Key to rotate selected ring right
-
-        public float rotationAmount = 90f; // Rotation angle for each press (e.g., 90 degrees)
-
-        private int selectedRingIndex = 0; // Tracks the currently selected ring
-
-        private void Start()
-        {
-            // Highlight the initially selected ring
-            HighlightSelectedRing();
-        }
+        public CircleInput[] circles;  // Array of circles with their custom input settings
+        public int numberOfSectors = 4;  // Number of sectors per circle (default is 4)
+        public float rotationAmount = 90f;  // How much to rotate per input (e.g., 90 degrees)
+        public Color activeSectorColor = Color.green; // Color for active sectors in the editor
+        public Color passiveSectorColor = Color.red;  // Color for the passive sector
 
         private void Update()
         {
-            HandleRingSwitching();
-            HandleRingRotation();
-        }
-
-        // Handle switching between rings
-        private void HandleRingSwitching()
-        {
-            if (Input.GetKeyDown(switchRingKey))
+            // Iterate through each circle and apply rotation based on input
+            foreach (CircleInput circleInput in circles)
             {
-                // Remove highlight from the currently selected ring
-                UnhighlightRing(selectedRingIndex);
-
-                // Cycle to the next ring
-                selectedRingIndex = (selectedRingIndex + 1) % circles.Length;
-
-                // Highlight the new selected ring
-                HighlightSelectedRing();
-
-                Debug.Log("Selected Ring: " + selectedRingIndex); // Optional: for debugging purposes
+                if (Input.GetKeyDown(circleInput.rotateLeftKey))
+                {
+                    RotateCircle(circleInput.circle, -rotationAmount);
+                }
+                if (Input.GetKeyDown(circleInput.rotateRightKey))
+                {
+                    RotateCircle(circleInput.circle, rotationAmount);
+                }
             }
         }
 
-        // Handle rotation of the selected ring
-        private void HandleRingRotation()
+        // Rotate the circle by a given number of degrees
+        private void RotateCircle(Transform circle, float degrees)
         {
-            if (Input.GetKeyDown(rotateLeftKey))
+            circle.Rotate(0, degrees, 0);  // Rotate along the Y-axis
+        }
+
+        // Draw sector boundaries in the Unity editor
+        private void OnDrawGizmos()
+        {
+            // Visualize each circle's sectors
+            foreach (CircleInput circleInput in circles)
             {
-                RotateSelectedRing(-rotationAmount);
+                DrawCircleSectors(circleInput.circle);
             }
+        }
 
-            if (Input.GetKeyDown(rotateRightKey))
+        // Draw the sectors for a specific circle using Gizmos
+        private void DrawCircleSectors(Transform circle)
+        {
+            if (circle == null) return;
+
+            // Calculate the angle step for each sector
+            float sectorAngle = 360f / numberOfSectors;
+
+            // World-aligned starting direction (forward, which is Z+ in Unity)
+            Vector3 startingDirection = Vector3.forward;
+
+            for (int i = 0; i < numberOfSectors; i++)
             {
-                RotateSelectedRing(rotationAmount);
+                // Calculate the world-aligned rotation for this sector
+                float currentAngle = i * sectorAngle;
+                Quaternion sectorRotation = Quaternion.Euler(0, currentAngle, 0);
+                Vector3 sectorDirection = sectorRotation * startingDirection;
+
+                // Set the color based on whether the sector is passive (last sector) or active
+                if (i == numberOfSectors - 1)
+                    Gizmos.color = passiveSectorColor;  // Passive sector (e.g., sector 4)
+                else
+                    Gizmos.color = activeSectorColor;   // Active sectors
+
+                // Draw the sector as a line starting from the circle's position
+                Gizmos.DrawLine(circle.position, circle.position + sectorDirection * 5f);  // 5f is the length of the line for visualization
             }
-        }
-
-        // Rotate the currently selected ring by a specified amount
-        private void RotateSelectedRing(float degrees)
-        {
-            Transform selectedCircle = circles[selectedRingIndex].circle;
-            selectedCircle.Rotate(0, degrees, 0); // Rotate along the Y-axis
-        }
-
-        // Highlight the currently selected ring
-        private void HighlightSelectedRing()
-        {
-            CircleInput selectedCircleInput = circles[selectedRingIndex];
-            selectedCircleInput.renderer.material = selectedCircleInput.highlightMaterial;
-        }
-
-        // Unhighlight a ring based on its index
-        private void UnhighlightRing(int ringIndex)
-        {
-            CircleInput circleInput = circles[ringIndex];
-            circleInput.renderer.material = circleInput.defaultMaterial;
         }
     }
 }
