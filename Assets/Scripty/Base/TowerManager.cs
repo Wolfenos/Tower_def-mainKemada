@@ -1,5 +1,6 @@
-using System.Collections.Generic;
+using KemadaTD;
 using UnityEngine;
+using System.Collections.Generic;
 using UnityEngine.UI;
 using TMPro;
 
@@ -8,11 +9,8 @@ namespace KemadaTD
     public class TowerManager : MonoBehaviour
     {
         [Header("UI Elements")]
-        [SerializeField] private GameObject buttonPrefab; // Button prefab to be instantiated in UI for each turret
-        [SerializeField] private Transform buttonParent;  // Parent object for buttons in the UI
-
-        [Header("Turret Prefabs")]
-        [SerializeField] private List<TurretData> turrets;    // List of turret prefabs
+        [SerializeField] private Button[] turretButtons; // Array of buttons to select specific turrets
+        [SerializeField] private TurretData[] turrets;   // Array of turret prefabs, corresponding to the buttons
 
         [Header("Finance Manager")]
         [SerializeField] internal FinanceManager financeManager;  // Reference to FinanceManager
@@ -21,17 +19,17 @@ namespace KemadaTD
 
         private void Start()
         {
-            foreach (var turret in turrets)
+            for (int i = 0; i < turretButtons.Length; i++)
             {
-                GameObject button = Instantiate(buttonPrefab, buttonParent);
-                button.GetComponentInChildren<TextMeshProUGUI>().text = turret.turretName + " ($" + turret.cost + ")";
-                button.GetComponent<Button>().onClick.AddListener(() => SelectTurret(turret));
+                int index = i; // Cache index to use in lambda expression
+                turretButtons[i].onClick.AddListener(() => SelectTurret(turrets[index]));
             }
         }
 
         private void SelectTurret(TurretData turret)
         {
             selectedTurret = turret;
+            Debug.Log($"Selected turret: {turret.turretName}");
         }
 
         public TurretData GetSelectedTurret()
@@ -46,47 +44,5 @@ namespace KemadaTD
         public string turretName;
         public GameObject prefab;
         public int cost;
-    }
-
-    public class BuildingManager : MonoBehaviour
-    {
-        [Header("Tower Manager Reference")]
-        [SerializeField] private TowerManager towerManager; // Reference to TowerManager
-
-        private void Update()
-        {
-            if (Input.GetMouseButtonDown(0))
-            {
-                BuildTurret();
-            }
-        }
-
-        private void BuildTurret()
-        {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-
-            if (Physics.Raycast(ray, out hit))
-            {
-                if (hit.collider.CompareTag("BuildRing"))
-                {
-                    GameObject ring = hit.collider.gameObject;
-                    TurretData selectedTurret = towerManager.GetSelectedTurret();
-
-                    if (selectedTurret != null && ring.transform.childCount == 0)
-                    {
-                        if (towerManager.financeManager.SpendMoney(selectedTurret.cost))
-                        {
-                            GameObject turretInstance = Instantiate(selectedTurret.prefab, ring.transform.position, Quaternion.identity);
-                            turretInstance.transform.SetParent(ring.transform);
-                        }
-                        else
-                        {
-                            Debug.Log("Not enough money to build this turret.");
-                        }
-                    }
-                }
-            }
-        }
     }
 }
