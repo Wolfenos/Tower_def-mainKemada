@@ -1,30 +1,34 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using System.Collections;
 
 public class RestartTrigger : MonoBehaviour
 {
     [SerializeField] private string targetTag = "Enemy";
     [SerializeField] private string menuSceneName = "Menu";
-    [SerializeField] private float timeBeforeSwitch = 10.0f;
-
-    private void Start()
-    {
-        // Start coroutine to switch to the menu scene after a set time
-        StartCoroutine(SwitchSceneAfterTime());
-    }
 
     private void OnTriggerEnter(Collider other)
     {
+        Debug.Log($"Object with tag '{other.tag}' entered the trigger.");
+
         if (other.CompareTag(targetTag))
         {
             Debug.Log("Enemy entered the trigger.");
+            SwitchScene();
+        }
+        else
+        {
+            Debug.LogWarning($"Object with tag '{other.tag}' does not match the target tag '{targetTag}'.");
+        }
+
+        Rigidbody rb = other.GetComponent<Rigidbody>();
+        if (rb == null)
+        {
+            Debug.LogWarning("The object that entered the trigger does not have a Rigidbody. A Rigidbody is required for proper trigger interaction.");
         }
     }
 
-    private IEnumerator SwitchSceneAfterTime()
+    private void SwitchScene()
     {
-        yield return new WaitForSeconds(timeBeforeSwitch);
         if (Application.CanStreamedLevelBeLoaded(menuSceneName))
         {
             SceneManager.LoadScene(menuSceneName);

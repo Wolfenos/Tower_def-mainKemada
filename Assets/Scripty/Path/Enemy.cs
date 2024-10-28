@@ -128,7 +128,7 @@ namespace KemadaTD
         }
 
 
-        private void OnTriggerEnter(Collider other)
+        /*private void OnTriggerEnter(Collider other)
         {
             if (other.CompareTag("SlowGround") || other.CompareTag("NormalGround"))
             {
@@ -146,7 +146,7 @@ namespace KemadaTD
             {
                 currentSpeedModifier = 1f;
             }
-        }
+        }*/
 
         private void ShowDamageNumber(float damageAmount)
         {

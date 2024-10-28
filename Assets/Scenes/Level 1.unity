@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
+  m_IndirectSpecularColor: {r: 0.31881458, g: 0.29415846, b: 0.22233526, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -10035,7 +10035,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetTag: Enemy
   menuSceneName: Menu
-  timeBeforeSwitch: 999
 --- !u!65 &401438755
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -10057,12 +10056,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 401438753}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.64, y: 0.82, z: -0.08}
-  m_LocalScale: {x: 26.1931, y: 40.694633, z: 34.41708}
+  m_LocalPosition: {x: 4.64, y: 0.82, z: -0.080001}
+  m_LocalScale: {x: 27.484419, y: 40.694633, z: 49.98867}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 14
+  m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &417318031
 GameObject:
