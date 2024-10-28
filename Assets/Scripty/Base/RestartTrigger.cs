@@ -6,6 +6,12 @@ public class RestartTrigger : MonoBehaviour
     [SerializeField] private string targetTag = "Enemy";
     [SerializeField] private string menuSceneName = "Menu";
 
+    private void Start()
+    {
+        // Make the trigger collider non-clickable and non-interactable by player
+        gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         Debug.Log($"Object with tag '{other.tag}' entered the trigger.");
