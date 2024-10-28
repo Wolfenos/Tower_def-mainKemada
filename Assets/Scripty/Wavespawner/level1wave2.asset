@@ -12,5 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ca99ead213afd44aa234eccfa29a934, type: 3}
   m_Name: level1wave2
   m_EditorClassIdentifier: 
-  pathWaves: []
+  pathWaves:
+  - enemyPath: {fileID: 0}
+    enemyTypes: []
+    enemyCounts: 
+    spawnInterval: 0
   waveDelay: 5

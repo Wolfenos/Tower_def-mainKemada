@@ -16,22 +16,36 @@ MonoBehaviour:
   - enemyPath: {fileID: 4619777747977312909, guid: 4a39af7dbd61a454bb6453ac3e2fb080,
       type: 3}
     enemyTypes:
+    - {fileID: 3437186968946855669, guid: f79267d21d2d24446bdb8fadac3427e8, type: 3}
+    - {fileID: 3637638023559049876, guid: 04708e368d6d4744496a1f5d1d1a8303, type: 3}
+    - {fileID: 3637638023559049876, guid: 04708e368d6d4744496a1f5d1d1a8303, type: 3}
     - {fileID: 7052941056349514516, guid: 4f92856586c6251468c1b097ee2f7da0, type: 3}
-    - {fileID: 741403481047729891, guid: b9c6a1b1bb9e66d48a762b5cf73e0b5e, type: 3}
-    enemyCounts: 32000000
-    spawnInterval: 0.18
+    enemyCounts: 05000000070000001e0000003c000000
+    spawnInterval: 2.3
   - enemyPath: {fileID: 1106413836485196884, guid: aafc34bab0be8d6438e94795e617f254,
       type: 3}
     enemyTypes:
+    - {fileID: 3637638023559049876, guid: 04708e368d6d4744496a1f5d1d1a8303, type: 3}
+    - {fileID: 3437186968946855669, guid: f79267d21d2d24446bdb8fadac3427e8, type: 3}
     - {fileID: 7052941056349514516, guid: 4f92856586c6251468c1b097ee2f7da0, type: 3}
-    - {fileID: 741403481047729891, guid: b9c6a1b1bb9e66d48a762b5cf73e0b5e, type: 3}
-    enemyCounts: 32000000
-    spawnInterval: 0.19
+    - {fileID: 7052941056349514516, guid: 4f92856586c6251468c1b097ee2f7da0, type: 3}
+    enemyCounts: 0c000000140000001900000032000000
+    spawnInterval: 3.75
+  - enemyPath: {fileID: 3522581495311355578, guid: 3b1ab589ed35d2b4788c22ecf00b475b,
+      type: 3}
+    enemyTypes:
+    - {fileID: 3437186968946855669, guid: f79267d21d2d24446bdb8fadac3427e8, type: 3}
+    - {fileID: 3637638023559049876, guid: 04708e368d6d4744496a1f5d1d1a8303, type: 3}
+    - {fileID: 7052941056349514516, guid: 4f92856586c6251468c1b097ee2f7da0, type: 3}
+    - {fileID: 7052941056349514516, guid: 4f92856586c6251468c1b097ee2f7da0, type: 3}
+    - {fileID: 7052941056349514516, guid: 4f92856586c6251468c1b097ee2f7da0, type: 3}
+    enemyCounts: 1100000002000000070000000f00000032000000
+    spawnInterval: 5
   - enemyPath: {fileID: 3522581495311355578, guid: 3b1ab589ed35d2b4788c22ecf00b475b,
       type: 3}
     enemyTypes:
     - {fileID: 7052941056349514516, guid: 4f92856586c6251468c1b097ee2f7da0, type: 3}
     - {fileID: 741403481047729891, guid: b9c6a1b1bb9e66d48a762b5cf73e0b5e, type: 3}
     enemyCounts: 32000000
-    spawnInterval: 0.2
-  waveDelay: 5
+    spawnInterval: 2.67
+  waveDelay: 10.09
