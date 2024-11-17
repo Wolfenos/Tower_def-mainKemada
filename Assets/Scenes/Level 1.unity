@@ -9201,7 +9201,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 17
+  m_RootOrder: 16
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &417318031
 GameObject:
@@ -16481,8 +16481,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 578850758}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.07828745, y: -55.19654, z: 0.11873159}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.4392608, y: -53.033855, z: -1.0139171}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -16497,8 +16497,8 @@ Transform:
   - {fileID: 653021034}
   - {fileID: 213218560}
   - {fileID: 9242043}
-  m_Father: {fileID: 0}
-  m_RootOrder: 15
+  m_Father: {fileID: 1179829184}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &597923180
 PrefabInstance:
@@ -48576,11 +48576,36 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 969390739}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4c39a7466e6aae949b2dabdb3b95af6e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sectors:
+  - name: Sector1
+    startAngle: 313
+    endAngle: 55
+    isActive: 1
+    isPassive: 0
+    color: {r: 0.17801023, g: 1, b: 0, a: 0.07058824}
+  - name: Sector2
+    startAngle: 55
+    endAngle: 134
+    isActive: 1
+    isPassive: 0
+    color: {r: 0.98929596, g: 1, b: 0, a: 1}
+  - name: Sector3
+    startAngle: 134
+    endAngle: 227
+    isActive: 1
+    isPassive: 0
+    color: {r: 0, g: 0.5429058, b: 1, a: 1}
+  - name: Mesto
+    startAngle: 222
+    endAngle: 313
+    isActive: 0
+    isPassive: 1
+    color: {r: 1, g: 0, b: 0.4847226, a: 1}
   inputSettings:
     selectNextCircleKey: 9
     rotateLeftKey: 101
@@ -48588,12 +48613,9 @@ MonoBehaviour:
   circles:
   - {fileID: 578850759}
   - {fileID: 1810709144}
-  numberOfSectors: 4
   rotationAmount: 90
   rotationDuration: 0.5
   rotationSpeed: 1
-  activeSectorColor: {r: 0, g: 1, b: 0, a: 1}
-  passiveSectorColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!1 &972802665
 GameObject:
   m_ObjectHideFlags: 0
@@ -56015,6 +56037,87 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1168937940}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1179829182
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1179829184}
+  - component: {fileID: 1179829183}
+  m_Layer: 0
+  m_Name: Rings
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1179829183
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1179829182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c39a7466e6aae949b2dabdb3b95af6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sectors:
+  - name: Sector1
+    startAngle: 313
+    endAngle: 55
+    isActive: 1
+    isPassive: 0
+    color: {r: 0.17801023, g: 1, b: 0, a: 0.07058824}
+  - name: Sector2
+    startAngle: 55
+    endAngle: 134
+    isActive: 1
+    isPassive: 0
+    color: {r: 0.98929596, g: 1, b: 0, a: 1}
+  - name: Sector3
+    startAngle: 134
+    endAngle: 227
+    isActive: 1
+    isPassive: 0
+    color: {r: 0, g: 0.5429058, b: 1, a: 1}
+  - name: Mesto
+    startAngle: 222
+    endAngle: 313
+    isActive: 0
+    isPassive: 1
+    color: {r: 1, g: 0, b: 0.4847226, a: 1}
+  inputSettings:
+    selectNextCircleKey: 9
+    rotateLeftKey: 101
+    rotateRightKey: 113
+  circles:
+  - {fileID: 578850759}
+  - {fileID: 1810709144}
+  rotationAmount: 90
+  rotationDuration: 0.5
+  rotationSpeed: 1
+--- !u!4 &1179829184
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1179829182}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.51754826, y: -2.1626854, z: 1.1326487}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 578850759}
+  - {fileID: 1810709144}
+  m_Father: {fileID: 0}
+  m_RootOrder: 15
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1191018953
 GameObject:
   m_ObjectHideFlags: 0
@@ -56730,7 +56833,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxAmmo: 20
+  currentAmmo: 0
   reloadTime: 5
+  hasAmmo: 1
   uiManager: {fileID: 0}
 --- !u!1001 &1275953289
 PrefabInstance:
@@ -85814,6 +85919,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1810709144}
+  - component: {fileID: 1810709145}
   m_Layer: 0
   m_Name: "Rotuj\xEDc\xEDzmrdvn\u011Bj\u0161\xED"
   m_TagString: Untagged
@@ -85828,17 +85934,64 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1810709143}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.018320188, y: -55.196564, z: 0.022125877}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.53586847, y: -53.03388, z: -1.1105229}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1211972709}
   - {fileID: 1013605516}
   - {fileID: 1905906712}
-  m_Father: {fileID: 0}
-  m_RootOrder: 16
+  m_Father: {fileID: 1179829184}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1810709145
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1810709143}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c39a7466e6aae949b2dabdb3b95af6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sectors:
+  - name: Sector1
+    startAngle: 313
+    endAngle: 55
+    isActive: 1
+    isPassive: 0
+    color: {r: 0.17801023, g: 1, b: 0, a: 0.07058824}
+  - name: Sector2
+    startAngle: 55
+    endAngle: 134
+    isActive: 1
+    isPassive: 0
+    color: {r: 0.98929596, g: 1, b: 0, a: 1}
+  - name: Sector3
+    startAngle: 134
+    endAngle: 227
+    isActive: 1
+    isPassive: 0
+    color: {r: 0, g: 0.5429058, b: 1, a: 1}
+  - name: Mesto
+    startAngle: 222
+    endAngle: 313
+    isActive: 0
+    isPassive: 0
+    color: {r: 1, g: 0, b: 0.4847226, a: 1}
+  inputSettings:
+    selectNextCircleKey: 9
+    rotateLeftKey: 101
+    rotateRightKey: 113
+  circles:
+  - {fileID: 578850759}
+  - {fileID: 1810709144}
+  rotationAmount: 90
+  rotationDuration: 0.5
+  rotationSpeed: 1
 --- !u!1 &1810883119
 GameObject:
   m_ObjectHideFlags: 0
@@ -91775,12 +91928,14 @@ MonoBehaviour:
   range: 60
   fireRate: 1
   damage: 20
+  maxAmmo: 10
+  reloadTime: 5
   bulletPrefab: {fileID: 7351834325846446354, guid: 0eeda0dde73a30f438d73f4b2d098ed0,
     type: 3}
   firePoints:
   - {fileID: 1841059579}
   rotatingPart: {fileID: 1841059579}
-  canShoot: 1
+  ammoText: {fileID: 0}
 --- !u!4 &1927254947
 Transform:
   m_ObjectHideFlags: 0
@@ -97814,7 +97969,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moneyText: {fileID: 2129989606}
-  startingMoney: 40
+  startingMoney: 500
   moneyPerKill: 1
 --- !u!1001 &2016806364
 PrefabInstance:
@@ -99257,10 +99412,20 @@ PrefabInstance:
       propertyPath: fireRate
       value: 2.02
       objectReference: {fileID: 0}
+    - target: {fileID: 4149651039561069368, guid: 72b3ee8d361ca83429b7ade13b48e07e,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6202705650063123537, guid: 72b3ee8d361ca83429b7ade13b48e07e,
         type: 3}
       propertyPath: m_Name
       value: Rychlodelnica
+      objectReference: {fileID: 0}
+    - target: {fileID: 6202705650063123537, guid: 72b3ee8d361ca83429b7ade13b48e07e,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 72b3ee8d361ca83429b7ade13b48e07e, type: 3}
@@ -99285,6 +99450,11 @@ PrefabInstance:
         type: 3}
       propertyPath: fireRate
       value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3515240592046306965, guid: 3246ce35799578a40838816756f497da,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4915888532702379853, guid: 3246ce35799578a40838816756f497da,
         type: 3}
@@ -99345,6 +99515,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Shotgun 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7384956067094733969, guid: 3246ce35799578a40838816756f497da,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3246ce35799578a40838816756f497da, type: 3}
@@ -99489,6 +99664,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: dalka
       objectReference: {fileID: 0}
+    - target: {fileID: 5421527271527446207, guid: 036fdf766ed607145b6550455172aaf0,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9058490552188897190, guid: 036fdf766ed607145b6550455172aaf0,
         type: 3}
       propertyPath: range
@@ -99498,6 +99678,11 @@ PrefabInstance:
         type: 3}
       propertyPath: damage
       value: 15.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 9058490552188897190, guid: 036fdf766ed607145b6550455172aaf0,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 036fdf766ed607145b6550455172aaf0, type: 3}

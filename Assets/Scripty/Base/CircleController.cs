@@ -1,5 +1,10 @@
 using UnityEngine;
+using System.Collections.Generic;
 using System.Collections;
+
+#if UNITY_EDITOR
+using UnityEditor; // Needed for Handles
+#endif
 
 namespace KemadaTD
 {
@@ -14,14 +19,26 @@ namespace KemadaTD
             public KeyCode rotateRightKey = KeyCode.RightArrow; // Key to rotate right
         }
 
+        [System.Serializable]
+        public class Sector
+        {
+            public string name;           // Name of the sector (for identification)
+            [Range(0f, 360f)]
+            public float startAngle;      // Start angle in degrees
+            [Range(0f, 360f)]
+            public float endAngle;        // End angle in degrees
+            public bool isActive;         // Active checkbox
+            public bool isPassive;        // Passive checkbox
+            public Color color = Color.green; // Color for visualization
+        }
+
+        public List<Sector> sectors = new List<Sector>(); // List of sectors
+
         public CircleInput inputSettings;  // Input settings for selecting and rotating circles
         public Transform[] circles;  // Array of circles to control
-        public int numberOfSectors = 4;  // Number of sectors per circle (default is 4)
         public float rotationAmount = 90f;  // How much to rotate per input (e.g., 90 degrees)
         public float rotationDuration = 0.5f; // Duration for the rotation animation
         public float rotationSpeed = 1.0f; // Speed of the rotation animation, editable in the inspector
-        public Color activeSectorColor = Color.green; // Color for active sectors in the editor
-        public Color passiveSectorColor = Color.red;  // Color for the passive sector
 
         private int currentCircleIndex = 0;  // Index of the currently selected circle
         private bool isRotating = false; // To check if a rotation is in progress
@@ -77,30 +94,50 @@ namespace KemadaTD
         // Draw the sectors for a specific circle using Gizmos
         private void DrawCircleSectors(Transform circle)
         {
-            if (circle == null) return;
+            if (circle == null || sectors == null || sectors.Count == 0)
+                return;
 
-            // Calculate the angle step for each sector
-            float sectorAngle = 360f / numberOfSectors;
+            float radius = 5f; // Adjust as needed for visualization
 
-            // World-aligned starting direction (forward, which is Z+ in Unity)
-            Vector3 startingDirection = Vector3.forward;
+#if UNITY_EDITOR
+            // Save the current color
+            Color oldColor = Handles.color;
 
-            for (int i = 0; i < numberOfSectors; i++)
+            foreach (Sector sector in sectors)
             {
-                // Calculate the world-aligned rotation for this sector
-                float currentAngle = i * sectorAngle;
-                Quaternion sectorRotation = Quaternion.Euler(0, currentAngle, 0);
-                Vector3 sectorDirection = sectorRotation * startingDirection;
+                // Set the color based on the sector's active/passive status
+                Handles.color = sector.color;
 
-                // Set the color based on whether the sector is passive (last sector) or active
-                if (i == numberOfSectors - 1)
-                    Gizmos.color = passiveSectorColor;  // Passive sector (e.g., sector 4)
-                else
-                    Gizmos.color = activeSectorColor;   // Active sectors
+                // Calculate the angles for the sector
+                float startAngle = sector.startAngle;
+                float endAngle = sector.endAngle;
 
-                // Draw the sector as a line starting from the circle's position
-                Gizmos.DrawLine(circle.position, circle.position + sectorDirection * 5f);  // 5f is the length of the line for visualization
+                // Ensure startAngle is less than endAngle
+                if (endAngle < startAngle)
+                {
+                    endAngle += 360f;
+                }
+
+                // Draw the sector as a filled arc
+                Handles.DrawSolidArc(
+                    circle.position,
+                    Vector3.up,
+                    Quaternion.Euler(0f, startAngle, 0f) * Vector3.forward,
+                    endAngle - startAngle,
+                    radius
+                );
+
+                // Optionally, draw sector boundaries
+                Handles.color = Color.black;
+                Vector3 from = Quaternion.Euler(0f, startAngle, 0f) * Vector3.forward * radius;
+                Vector3 to = Quaternion.Euler(0f, endAngle, 0f) * Vector3.forward * radius;
+                Handles.DrawLine(circle.position, circle.position + from);
+                Handles.DrawLine(circle.position, circle.position + to);
             }
+
+            // Restore the old color
+            Handles.color = oldColor;
+#endif
         }
     }
 }
