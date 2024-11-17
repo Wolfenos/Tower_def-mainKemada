@@ -165,27 +165,37 @@ namespace KemadaTD
         private void FindCircleAndController()
         {
             Transform current = transform.parent;
+            circle = null;
+            circleController = null;
+
             while (current != null)
             {
-                CircleController cc = current.GetComponent<CircleController>();
-                if (cc != null)
+                if (current.parent == null)
                 {
-                    circle = current;
-                    circleController = cc;
+                    // We've reached the top of the hierarchy without finding the Ring or CircleController
+                    Debug.LogWarning($"{gameObject.name}: Ring or CircleController not found in parent hierarchy.");
                     break;
                 }
+
+                if (current.parent.GetComponent<CircleController>() != null)
+                {
+                    // The current object is a Ring (child of RINGS)
+                    circle = current;
+                    circleController = current.parent.GetComponent<CircleController>();
+                    Debug.Log($"{gameObject.name}: Found Ring '{circle.name}' and CircleController '{circleController.gameObject.name}'.");
+                    break;
+                }
+
                 current = current.parent;
             }
 
             if (circleController == null)
             {
-                Debug.LogWarning($"{gameObject.name}: CircleController not found in parent hierarchy.");
-            }
-            else
-            {
-                Debug.Log($"{gameObject.name}: Found CircleController on {circleController.gameObject.name}.");
+                Debug.LogWarning($"{gameObject.name}: CircleController not found.");
             }
         }
+
+
 
         // Determine if the turret is in an active sector
         private bool IsInActiveSector()
