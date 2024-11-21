@@ -9,6 +9,7 @@ TagManager:
   - NormalGround
   - Border
   - Anchor
+  - Ring
   layers:
   - Default
   - TransparentFX

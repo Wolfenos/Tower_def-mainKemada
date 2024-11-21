@@ -9186,7 +9186,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Size: {x: 0.8, y: 1, z: 0.8}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!4 &401438756
 Transform:
@@ -9196,7 +9196,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 401438753}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.63, y: 0.82, z: -0.080001}
+  m_LocalPosition: {x: 1.63, y: 0.82, z: 0.14}
   m_LocalScale: {x: 13.166416, y: 19.494772, z: 23.947083}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -16469,7 +16469,7 @@ GameObject:
   - component: {fileID: 578850759}
   m_Layer: 0
   m_Name: "Rotuj\xEDc\xEDzmrdvnit\u0159n\xED"
-  m_TagString: Untagged
+  m_TagString: Ring
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -16726,7 +16726,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1969970700}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &620107171
 MonoBehaviour:
@@ -48537,85 +48537,6 @@ Transform:
   m_Father: {fileID: 1905906712}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &969390739
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 969390740}
-  - component: {fileID: 969390741}
-  m_Layer: 0
-  m_Name: Rotmanager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &969390740
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 969390739}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1969970700}
-  m_RootOrder: 6
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &969390741
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 969390739}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4c39a7466e6aae949b2dabdb3b95af6e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sectors:
-  - name: Sector1
-    startAngle: 313
-    endAngle: 55
-    isActive: 1
-    isPassive: 0
-    color: {r: 0.17801023, g: 1, b: 0, a: 0.07058824}
-  - name: Sector2
-    startAngle: 55
-    endAngle: 134
-    isActive: 1
-    isPassive: 0
-    color: {r: 0.98929596, g: 1, b: 0, a: 1}
-  - name: Sector3
-    startAngle: 134
-    endAngle: 227
-    isActive: 1
-    isPassive: 0
-    color: {r: 0, g: 0.5429058, b: 1, a: 1}
-  - name: Mesto
-    startAngle: 222
-    endAngle: 313
-    isActive: 0
-    isPassive: 1
-    color: {r: 1, g: 0, b: 0.4847226, a: 1}
-  inputSettings:
-    selectNextCircleKey: 9
-    rotateLeftKey: 101
-    rotateRightKey: 113
-  circles:
-  - {fileID: 578850759}
-  - {fileID: 1810709144}
-  rotationAmount: 90
-  rotationDuration: 0.5
-  rotationSpeed: 1
 --- !u!1 &972802665
 GameObject:
   m_ObjectHideFlags: 0
@@ -56066,10 +55987,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c39a7466e6aae949b2dabdb3b95af6e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inputSettings:
+    selectNextRingKey: 9
+    rotateLeftKey: 101
+    rotateRightKey: 113
+  rings:
+  - {fileID: 578850759}
+  - {fileID: 1810709144}
   sectors:
   - name: Sector1
-    startAngle: 313
-    endAngle: 55
+    startAngle: 311
+    endAngle: 60
     isActive: 1
     isPassive: 0
     color: {r: 0.17801023, g: 1, b: 0, a: 0.07058824}
@@ -56091,13 +56019,6 @@ MonoBehaviour:
     isActive: 0
     isPassive: 1
     color: {r: 1, g: 0, b: 0.4847226, a: 1}
-  inputSettings:
-    selectNextCircleKey: 9
-    rotateLeftKey: 101
-    rotateRightKey: 113
-  circles:
-  - {fileID: 578850759}
-  - {fileID: 1810709144}
   rotationAmount: 90
   rotationDuration: 0.5
   rotationSpeed: 1
@@ -56818,7 +56739,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1969970700}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1241636422
 MonoBehaviour:
@@ -56832,11 +56753,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 963da293de4ee664293b2e9aba68a5bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxAmmo: 20
-  currentAmmo: 0
-  reloadTime: 5
-  hasAmmo: 1
-  uiManager: {fileID: 0}
 --- !u!1001 &1275953289
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -85919,10 +85835,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1810709144}
-  - component: {fileID: 1810709145}
   m_Layer: 0
   m_Name: "Rotuj\xEDc\xEDzmrdvn\u011Bj\u0161\xED"
-  m_TagString: Untagged
+  m_TagString: Ring
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -85945,53 +85860,6 @@ Transform:
   m_Father: {fileID: 1179829184}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1810709145
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1810709143}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4c39a7466e6aae949b2dabdb3b95af6e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sectors:
-  - name: Sector1
-    startAngle: 313
-    endAngle: 55
-    isActive: 1
-    isPassive: 0
-    color: {r: 0.17801023, g: 1, b: 0, a: 0.07058824}
-  - name: Sector2
-    startAngle: 55
-    endAngle: 134
-    isActive: 1
-    isPassive: 0
-    color: {r: 0.98929596, g: 1, b: 0, a: 1}
-  - name: Sector3
-    startAngle: 134
-    endAngle: 227
-    isActive: 1
-    isPassive: 0
-    color: {r: 0, g: 0.5429058, b: 1, a: 1}
-  - name: Mesto
-    startAngle: 222
-    endAngle: 313
-    isActive: 0
-    isPassive: 0
-    color: {r: 1, g: 0, b: 0.4847226, a: 1}
-  inputSettings:
-    selectNextCircleKey: 9
-    rotateLeftKey: 101
-    rotateRightKey: 113
-  circles:
-  - {fileID: 578850759}
-  - {fileID: 1810709144}
-  rotationAmount: 90
-  rotationDuration: 0.5
-  rotationSpeed: 1
 --- !u!1 &1810883119
 GameObject:
   m_ObjectHideFlags: 0
@@ -91920,7 +91788,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1927254945}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0b7bdf0b9d2cf0a47baf670280325e9e, type: 3}
   m_Name: 
@@ -97491,7 +97359,6 @@ Transform:
   - {fileID: 170079288}
   - {fileID: 2075065047}
   - {fileID: 2094312039}
-  - {fileID: 969390740}
   - {fileID: 1241636421}
   - {fileID: 620107170}
   m_Father: {fileID: 0}
@@ -99436,6 +99303,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3191128557740996660, guid: 3246ce35799578a40838816756f497da,
+        type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3515240592046306965, guid: 3246ce35799578a40838816756f497da,
         type: 3}
       propertyPath: range

@@ -12,7 +12,7 @@ namespace KemadaTD
 
         [Header("Ammunition Settings")]
         public int maxAmmo = 10;              // Max ammo capacity
-        public float reloadTime = 5f;         // Time to reload when in passive sector
+        public float reloadTime = 5f;         // Time (in seconds) to fully reload from 0 to max ammo
 
         [Header("References")]
         public GameObject bulletPrefab;       // Prefab for the bullet
@@ -20,61 +20,64 @@ namespace KemadaTD
         public Transform rotatingPart;        // Part of the turret that will rotate towards the target
         public TextMeshProUGUI ammoText;      // UI Text to display ammo count (assign in Inspector)
 
-        private int currentAmmo;              // Current ammo count
-        private float reloadTimer = 0f;       // Timer for reloading
-        private bool isReloading = false;     // Is the turret currently reloading
+        private float currentAmmo;            // Current ammo count (using float for smooth reloading)
+        private float reloadRate;             // Rate at which ammo is reloaded per second
 
         private Transform target;             // Current target
         private float fireCountdown = 0f;     // Countdown for next shot
 
         // Sector logic variables
         private CircleController circleController; // Reference to the CircleController
-        private Transform circle;                  // The circle (ring) this turret is on
+        private Vector3 centerPoint = Vector3.zero; // Center point for sector calculations
 
         private void Start()
         {
             // Initialize ammo
             currentAmmo = maxAmmo;
 
-            // Find the circle and CircleController
-            FindCircleAndController();
+            // Calculate reload rate
+            reloadRate = maxAmmo / reloadTime;
+
+            // Find the CircleController
+            FindCircleController();
         }
 
         private void Update()
         {
-            // Update the current target
-            UpdateTarget();
-
             // Update sector status
             bool inActiveSector = IsInActiveSector();
 
-            if (isReloading)
-            {
-                reloadTimer -= Time.deltaTime;
-                if (reloadTimer <= 0f)
-                {
-                    // Finish reloading
-                    currentAmmo = maxAmmo;
-                    isReloading = false;
-                }
-            }
-
             if (!inActiveSector)
             {
-                // If in passive sector, start reloading if not already at max ammo
-                if (!isReloading && currentAmmo < maxAmmo)
+                // In passive sector: stop targeting and shooting, and reload continuously
+                target = null; // Stop targeting
+
+                // Reload ammo continuously until maxAmmo is reached
+                if (currentAmmo < maxAmmo)
                 {
-                    isReloading = true;
-                    reloadTimer = reloadTime;
-                    Debug.Log($"{gameObject.name}: Entered passive sector. Starting reload.");
+                    currentAmmo += reloadRate * Time.deltaTime;
+                    if (currentAmmo > maxAmmo)
+                        currentAmmo = maxAmmo;
                 }
 
-                // Cannot shoot in passive sector
+                // Update ammo text UI
+                if (ammoText != null)
+                {
+                    ammoText.text = Mathf.FloorToInt(currentAmmo).ToString();
+                }
+
+                // Exit Update() here since turret does not target or shoot in passive sector
                 return;
             }
 
-            // If in active sector and not reloading
-            if (target == null || isReloading)
+            // Turret is in active sector
+            // Proceed to update target and handle shooting
+
+            // Update the current target
+            UpdateTarget();
+
+            // If there's no target, do nothing
+            if (target == null)
                 return;
 
             // Rotate turret towards the target
@@ -83,7 +86,7 @@ namespace KemadaTD
             // Check fire cooldown
             if (fireCountdown <= 0f) // Shoot if cooldown is complete
             {
-                if (currentAmmo > 0)
+                if (currentAmmo >= 1)
                 {
                     Shoot();
                     currentAmmo--;
@@ -101,7 +104,7 @@ namespace KemadaTD
             // Update ammo text UI
             if (ammoText != null)
             {
-                ammoText.text = currentAmmo.ToString();
+                ammoText.text = Mathf.FloorToInt(currentAmmo).ToString();
             }
         }
 
@@ -136,6 +139,9 @@ namespace KemadaTD
         // Update the target based on finding the nearest enemy in range
         private void UpdateTarget()
         {
+            if (circleController == null)
+                return; // Ensure CircleController is available
+
             GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy"); // Ensure enemies are tagged as "Enemy"
             float shortestDistance = Mathf.Infinity;
             GameObject nearestEnemy = null;
@@ -161,73 +167,45 @@ namespace KemadaTD
             }
         }
 
-        // Find the circle and CircleController the turret is on
-        private void FindCircleAndController()
+        // Find the CircleController in the scene
+        private void FindCircleController()
         {
-            Transform current = transform.parent;
-            circle = null;
-            circleController = null;
-
-            while (current != null)
-            {
-                if (current.parent == null)
-                {
-                    // We've reached the top of the hierarchy without finding the Ring or CircleController
-                    Debug.LogWarning($"{gameObject.name}: Ring or CircleController not found in parent hierarchy.");
-                    break;
-                }
-
-                if (current.parent.GetComponent<CircleController>() != null)
-                {
-                    // The current object is a Ring (child of RINGS)
-                    circle = current;
-                    circleController = current.parent.GetComponent<CircleController>();
-                    Debug.Log($"{gameObject.name}: Found Ring '{circle.name}' and CircleController '{circleController.gameObject.name}'.");
-                    break;
-                }
-
-                current = current.parent;
-            }
-
+            circleController = FindObjectOfType<CircleController>();
             if (circleController == null)
             {
-                Debug.LogWarning($"{gameObject.name}: CircleController not found.");
+                Debug.LogWarning($"{gameObject.name}: CircleController not found in the scene.");
+            }
+            else
+            {
+                // Assume the center point is at the CircleController's position
+                centerPoint = circleController.transform.position;
             }
         }
-
-
 
         // Determine if the turret is in an active sector
         private bool IsInActiveSector()
         {
-            if (circle == null || circleController == null)
+            if (circleController == null)
             {
-                Debug.LogWarning($"{gameObject.name}: Circle or CircleController is null.");
-                return true; // Default to active if circle or CircleController not found
+                Debug.LogWarning($"{gameObject.name}: CircleController is null.");
+                return true; // Default to active if CircleController not found
             }
 
-            // Transform the turret's position into the circle's local space
-            Vector3 localPos = circle.InverseTransformPoint(transform.position);
+            // Calculate the direction from the center point to the turret's position in world space
+            Vector3 direction = transform.position - centerPoint;
 
-            // Calculate the angle between the local forward direction and the turret's local position
-            float angle = Mathf.Atan2(localPos.x, localPos.z) * Mathf.Rad2Deg;
+            // Calculate the angle between the world's forward direction and the direction to the turret
+            float angle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
             if (angle < 0f)
                 angle += 360f;
 
-            // Debug: Output the turret's local position and calculated angle
-            Debug.Log($"{gameObject.name}: Local Position: {localPos}, Angle: {angle}");
-
             foreach (var sector in circleController.sectors)
             {
-                float startAngle = sector.startAngle;
-                float endAngle = sector.endAngle;
-
-                // Handle wrap-around
-                if (endAngle < startAngle)
-                    endAngle += 360f;
+                float startAngle = sector.startAngle % 360f;
+                float endAngle = sector.endAngle % 360f;
 
                 // Check if the angle falls within the sector
-                if (angle >= startAngle && angle <= endAngle)
+                if (IsAngleInSector(angle, startAngle, endAngle))
                 {
                     // Determine sector status based on Active and Passive checkboxes
                     bool isActiveSector;
@@ -248,16 +226,27 @@ namespace KemadaTD
                         isActiveSector = false;
                     }
 
-                    // Debug: Output sector information
-                    Debug.Log($"{gameObject.name}: In Sector '{sector.name}' (Start: {startAngle}, End: {endAngle}), IsActive: {sector.isActive}, IsPassive: {sector.isPassive}, IsActiveSector: {isActiveSector}");
-
                     return isActiveSector;
                 }
             }
 
             // If not in any sector, default to passive
-            Debug.Log($"{gameObject.name}: Not in any sector. Defaulting to passive.");
             return false;
+        }
+
+        // Helper method to determine if an angle is within a sector, accounting for wrap-around
+        private bool IsAngleInSector(float angle, float startAngle, float endAngle)
+        {
+            if (startAngle <= endAngle)
+            {
+                // Normal sector
+                return angle >= startAngle && angle <= endAngle;
+            }
+            else
+            {
+                // Wrap-around sector
+                return angle >= startAngle || angle <= endAngle;
+            }
         }
 
         // Visualize the turret range in the Editor
