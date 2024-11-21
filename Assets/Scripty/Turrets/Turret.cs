@@ -6,9 +6,10 @@ namespace KemadaTD
     public class Turret : MonoBehaviour
     {
         [Header("Turret Settings")]
-        public float range = 10f;             // Range of the turret
+        public float range = 10f;             // Maximum range of the turret
         public float fireRate = 1f;           // Fire rate (shots per second)
         public float damage = 20f;            // Damage per shot
+        public float fieldOfViewAngle = 60f;  // Field of view angle for targeting (in degrees)
 
         [Header("Ammunition Settings")]
         public int maxAmmo = 10;              // Max ammo capacity
@@ -136,7 +137,7 @@ namespace KemadaTD
             }
         }
 
-        // Update the target based on finding the nearest enemy in range
+        // Update the target based on finding the nearest enemy in cone
         private void UpdateTarget()
         {
             if (circleController == null)
@@ -146,20 +147,33 @@ namespace KemadaTD
             float shortestDistance = Mathf.Infinity;
             GameObject nearestEnemy = null;
 
-            // Loop through all enemies to find the nearest one in range
+            // Loop through all enemies to find the nearest one in the cone
             foreach (GameObject enemy in enemies)
             {
-                float distanceToEnemy = Vector3.Distance(transform.position, enemy.transform.position);
-                if (distanceToEnemy < shortestDistance && distanceToEnemy <= range)
+                Vector3 dirToEnemy = enemy.transform.position - transform.position;
+                float distanceToEnemy = dirToEnemy.magnitude;
+
+                // Check if the enemy is within range
+                if (distanceToEnemy <= range)
                 {
-                    shortestDistance = distanceToEnemy;
-                    nearestEnemy = enemy;
+                    // Check if the enemy is within the field of view angle
+                    float angleToEnemy = Vector3.Angle(transform.forward, dirToEnemy);
+
+                    if (angleToEnemy <= fieldOfViewAngle / 2f)
+                    {
+                        // Enemy is within the cone
+                        if (distanceToEnemy < shortestDistance)
+                        {
+                            shortestDistance = distanceToEnemy;
+                            nearestEnemy = enemy;
+                        }
+                    }
                 }
             }
 
             if (nearestEnemy != null)
             {
-                target = nearestEnemy.transform; // Set the target to the nearest enemy
+                target = nearestEnemy.transform; // Set the target to the nearest enemy in the cone
             }
             else
             {
@@ -237,9 +251,10 @@ namespace KemadaTD
         // Helper method to determine if an angle is within a sector, accounting for wrap-around
         private bool IsAngleInSector(float angle, float startAngle, float endAngle)
         {
+            // Angles are already normalized in the calling method
             if (startAngle <= endAngle)
             {
-                // Normal sector
+                // Normal sector (no wrap-around)
                 return angle >= startAngle && angle <= endAngle;
             }
             else
@@ -249,11 +264,45 @@ namespace KemadaTD
             }
         }
 
-        // Visualize the turret range in the Editor
+        // Visualize the turret range and cone in the Editor
         private void OnDrawGizmosSelected()
         {
+            // Draw the range sphere
             Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(transform.position, range); // Draw a red circle representing the turret's range
+            Gizmos.DrawWireSphere(transform.position, range);
+
+            // Draw the field of view cone
+            Gizmos.color = Color.yellow;
+            DrawFieldOfView();
+        }
+
+        // Helper method to draw the field of view cone
+        private void DrawFieldOfView()
+        {
+            if (rotatingPart == null)
+                return;
+
+            Vector3 forwardDirection = transform.forward;
+
+            Vector3 leftBoundary = Quaternion.Euler(0, -fieldOfViewAngle / 2f, 0) * forwardDirection;
+            Vector3 rightBoundary = Quaternion.Euler(0, fieldOfViewAngle / 2f, 0) * forwardDirection;
+
+            Gizmos.DrawLine(transform.position, transform.position + leftBoundary * range);
+            Gizmos.DrawLine(transform.position, transform.position + rightBoundary * range);
+
+            // Optionally, draw an arc to represent the cone (for visualization)
+            int segments = 20;
+            float angleStep = fieldOfViewAngle / segments;
+            Vector3 previousPoint = transform.position + leftBoundary * range;
+
+            for (int i = 1; i <= segments; i++)
+            {
+                float angle = -fieldOfViewAngle / 2f + angleStep * i;
+                Vector3 dir = Quaternion.Euler(0, angle, 0) * forwardDirection;
+                Vector3 currentPoint = transform.position + dir * range;
+                Gizmos.DrawLine(previousPoint, currentPoint);
+                previousPoint = currentPoint;
+            }
         }
     }
 }

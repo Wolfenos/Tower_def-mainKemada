@@ -152,6 +152,7 @@ MonoBehaviour:
   range: 20
   fireRate: 5
   damage: 7.01
+  fieldOfViewAngle: 90
   maxAmmo: 10
   reloadTime: 0
   bulletPrefab: {fileID: 7351834325846446354, guid: 0eeda0dde73a30f438d73f4b2d098ed0,

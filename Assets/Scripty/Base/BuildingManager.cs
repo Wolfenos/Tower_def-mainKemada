@@ -14,6 +14,7 @@ namespace KemadaTD
         [SerializeField] private TextMeshProUGUI buildText;
 
         private bool isBuilding = false;
+        private Vector3 centerPoint;
 
         // Store references to all anchor points in the scene
         private List<AnchorHighlighter> anchors = new List<AnchorHighlighter>();
@@ -22,6 +23,17 @@ namespace KemadaTD
         {
             // Find all anchor objects in the scene with AnchorHighlighter attached
             anchors.AddRange(FindObjectsOfType<AnchorHighlighter>());
+            
+            CircleController circleController = FindObjectOfType<CircleController>();
+            if (circleController != null)
+            {
+                centerPoint = circleController.transform.position;
+            }
+            else
+            {
+                centerPoint = Vector3.zero; // Default to (0,0,0) if CircleController not found
+                Debug.LogWarning("CircleController not found. Using Vector3.zero as center point.");
+            }
         }
 
         private void Update()
@@ -60,7 +72,28 @@ namespace KemadaTD
                     {
                         if (towerManager.financeManager.SpendMoney(selectedTurret.cost))
                         {
-                            GameObject turretInstance = Instantiate(selectedTurret.prefab, anchor.transform.position, Quaternion.identity);
+                            // Calculate the direction from the center point to the anchor
+                            Vector3 centerPoint = Vector3.zero; // Adjust if necessary (e.g., get from CircleController)
+                            Vector3 direction = anchor.transform.position - centerPoint;
+
+                            // Flatten the direction vector to the XZ plane
+                            direction.y = 0f;
+
+                            // Check for zero magnitude to avoid errors
+                            if (direction.sqrMagnitude == 0f)
+                            {
+                                direction = anchor.transform.forward; // Default to anchor's forward if direction is zero
+                            }
+                            else
+                            {
+                                direction = direction.normalized;
+                            }
+
+                            // Create a rotation that faces along that direction
+                            Quaternion rotation = Quaternion.LookRotation(direction);
+
+                            // Instantiate the turret with the calculated rotation
+                            GameObject turretInstance = Instantiate(selectedTurret.prefab, anchor.transform.position, rotation);
                             turretInstance.transform.SetParent(anchor.transform);
                             anchor.tag = "OccupiedAnchor";
                             isBuilding = false;
@@ -80,6 +113,7 @@ namespace KemadaTD
                 }
             }
         }
+
 
         private void HighlightAvailableAnchors(bool shouldHighlight)
         {
