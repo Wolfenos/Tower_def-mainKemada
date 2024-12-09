@@ -54,9 +54,9 @@ namespace KemadaTD
                 yield break;
             }
 
-            if (pathWave.enemyPath.pathPoints == null || pathWave.enemyPath.pathPoints.Count == 0)
+            if ((pathWave.enemyPath.pathPoints == null || pathWave.enemyPath.pathPoints.Count == 0))
             {
-                Debug.LogError("Path points are not assigned correctly in EnemyPath.");
+                Debug.LogError("Path points are not assigned or empty in EnemyPath.");
                 yield break;
             }
 
@@ -80,41 +80,34 @@ namespace KemadaTD
 
                 for (int i = 0; i < count; i++)
                 {
-                    if (pathWave.enemyPath.pathPoints[0] != null)
+                    Transform spawnPoint = pathWave.enemyPath.GetRandomSpawnPoint();
+                    if (spawnPoint == null)
                     {
-                        Vector3 spawnPosition = pathWave.enemyPath.pathPoints[0].position;
+                        Debug.LogError("No spawn points found in EnemyPath. Cannot spawn enemy.");
+                        yield break;
+                    }
 
-                        // Apply upward offset to account for enemy pivot at center
-                        float yOffset = 1f; // Adjust based on the approximate height of the enemy
-                        spawnPosition.y += yOffset;
+                    Vector3 spawnPosition = spawnPoint.position;
+                    // If needed, adjust Y position based on ground, same logic as before
 
-                        // Raycast downward to confirm ground position
-                        RaycastHit hit;
-                        if (Physics.Raycast(spawnPosition + Vector3.up * 10f, Vector3.down, out hit, Mathf.Infinity))
-                        {
-                            spawnPosition = hit.point + Vector3.up * yOffset; // Set to hit point + offset
-                        }
-                        else
-                        {
-                            Debug.LogWarning("No ground detected below the spawn point.");
-                        }
+                    // Raycast down to find ground if necessary
+                    RaycastHit hit;
+                    if (Physics.Raycast(spawnPosition + Vector3.up * 10f, Vector3.down, out hit, Mathf.Infinity))
+                    {
+                        spawnPosition = hit.point + Vector3.up * 1f;
+                    }
 
-                        GameObject newEnemy = Instantiate(enemyType, spawnPosition, Quaternion.identity);
-                        Enemy enemyScript = newEnemy.GetComponent<Enemy>();
+                    GameObject newEnemy = Instantiate(enemyType, spawnPosition, Quaternion.identity);
+                    Enemy enemyScript = newEnemy.GetComponent<Enemy>();
 
-                        if (enemyScript != null)
-                        {
-                            enemyScript.Initialize(100f, pathWave.enemyPath.transform);
-                        }
-                        else
-                        {
-                            Debug.LogError("Enemy prefab is missing the Enemy script component.");
-                            Destroy(newEnemy);
-                        }
+                    if (enemyScript != null)
+                    {
+                        enemyScript.Initialize(100f, pathWave.enemyPath.transform);
                     }
                     else
                     {
-                        Debug.LogError("First path point is missing in EnemyPath.");
+                        Debug.LogError("Enemy prefab is missing the Enemy script component.");
+                        Destroy(newEnemy);
                     }
 
                     yield return new WaitForSeconds(pathWave.spawnInterval);

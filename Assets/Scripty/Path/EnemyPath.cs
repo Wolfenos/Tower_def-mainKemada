@@ -6,6 +6,7 @@ namespace KemadaTD
     public class EnemyPath : MonoBehaviour
     {
         public List<Transform> pathPoints = new List<Transform>();
+        public List<Transform> spawnPoints = new List<Transform>();
 
         public List<Vector3> GetPathPositions()
         {
@@ -20,17 +21,43 @@ namespace KemadaTD
             return positions;
         }
 
-        public void OnDrawGizmos()
+        public Transform GetRandomSpawnPoint()
         {
-            if (pathPoints == null || pathPoints.Count < 2)
-                return;
-
-            Gizmos.color = Color.green;
-            for (int i = 0; i < pathPoints.Count - 1; i++)
+            if (spawnPoints == null || spawnPoints.Count == 0)
             {
-                if (pathPoints[i] != null && pathPoints[i + 1] != null)
+                Debug.LogWarning("No spawn points available.");
+                return null;
+            }
+
+            int randomIndex = Random.Range(0, spawnPoints.Count);
+            return spawnPoints[randomIndex];
+        }
+
+        private void OnDrawGizmos()
+        {
+            // Draw path lines
+            Gizmos.color = Color.green;
+            if (pathPoints != null && pathPoints.Count > 1)
+            {
+                for (int i = 0; i < pathPoints.Count - 1; i++)
                 {
-                    Gizmos.DrawLine(pathPoints[i].position, pathPoints[i + 1].position);
+                    if (pathPoints[i] != null && pathPoints[i + 1] != null)
+                    {
+                        Gizmos.DrawLine(pathPoints[i].position, pathPoints[i + 1].position);
+                    }
+                }
+            }
+
+            // Optionally, draw lines or icons for spawn points
+            Gizmos.color = Color.blue;
+            if (spawnPoints != null)
+            {
+                foreach (Transform spawnPoint in spawnPoints)
+                {
+                    if (spawnPoint != null)
+                    {
+                        Gizmos.DrawWireSphere(spawnPoint.position, 0.5f);
+                    }
                 }
             }
         }

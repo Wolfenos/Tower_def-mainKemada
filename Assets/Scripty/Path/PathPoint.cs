@@ -4,13 +4,15 @@ namespace KemadaTD
 {
     public class PathPoint : MonoBehaviour
     {
-        public Color gizmoColor = Color.yellow; // Color for visualizing this point in the editor
+        public Color gizmoColor = Color.yellow;
 
         private void OnDrawGizmos()
         {
-            // Draw a sphere to represent this path point
             Gizmos.color = gizmoColor;
             Gizmos.DrawSphere(transform.position, 0.3f);
+#if UNITY_EDITOR
+            UnityEditor.Handles.Label(transform.position + Vector3.up * 0.5f, "Path Point");
+#endif
         }
     }
 }

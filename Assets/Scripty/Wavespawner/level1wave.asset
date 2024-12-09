@@ -41,11 +41,4 @@ MonoBehaviour:
     - {fileID: 7052941056349514516, guid: 4f92856586c6251468c1b097ee2f7da0, type: 3}
     enemyCounts: 1100000002000000070000000f00000032000000
     spawnInterval: 5
-  - enemyPath: {fileID: 3522581495311355578, guid: 3b1ab589ed35d2b4788c22ecf00b475b,
-      type: 3}
-    enemyTypes:
-    - {fileID: 7052941056349514516, guid: 4f92856586c6251468c1b097ee2f7da0, type: 3}
-    - {fileID: 741403481047729891, guid: b9c6a1b1bb9e66d48a762b5cf73e0b5e, type: 3}
-    enemyCounts: 32000000
-    spawnInterval: 2.67
   waveDelay: 10.09

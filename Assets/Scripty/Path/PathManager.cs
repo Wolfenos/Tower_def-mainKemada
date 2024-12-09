@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace KemadaTD
+/*namespace KemadaTD
 {
     public class PathManager : MonoBehaviour
     {
@@ -19,4 +19,4 @@ namespace KemadaTD
             }
         }
     }
-}   
+}   */
