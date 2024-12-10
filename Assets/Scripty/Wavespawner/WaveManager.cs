@@ -88,14 +88,17 @@ namespace KemadaTD
                     }
 
                     Vector3 spawnPosition = spawnPoint.position;
-                    // If needed, adjust Y position based on ground, same logic as before
 
                     // Raycast down to find ground if necessary
-                    RaycastHit hit;
-                    if (Physics.Raycast(spawnPosition + Vector3.up * 10f, Vector3.down, out hit, Mathf.Infinity))
+                    if (Physics.Raycast(spawnPosition + Vector3.up * 10f, Vector3.down, out RaycastHit hit, Mathf.Infinity))
                     {
                         spawnPosition = hit.point + Vector3.up * 1f;
                     }
+
+                    // Apply random offset
+                    float xOffset = Random.Range(pathWave.xSpawnOffsetRange.x, pathWave.xSpawnOffsetRange.y);
+                    float zOffset = Random.Range(pathWave.zSpawnOffsetRange.x, pathWave.zSpawnOffsetRange.y);
+                    spawnPosition += new Vector3(xOffset, 0f, zOffset);
 
                     GameObject newEnemy = Instantiate(enemyType, spawnPosition, Quaternion.identity);
                     Enemy enemyScript = newEnemy.GetComponent<Enemy>();
@@ -114,5 +117,6 @@ namespace KemadaTD
                 }
             }
         }
+
     }
 }

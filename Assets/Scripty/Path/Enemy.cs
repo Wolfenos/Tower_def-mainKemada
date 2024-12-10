@@ -93,7 +93,7 @@ namespace KemadaTD
             Vector2 endXZ = new Vector2(targetPoint.position.x, targetPoint.position.z);
             Vector2 currentXZ = Vector2.Lerp(startXZ, endXZ, lerpProgress);
 
-            // Now find correct Y via raycast
+            // Determine the new position, raycast down to find correct Y on ground
             Vector3 positionToAdjust = new Vector3(currentXZ.x, raycastHeight, currentXZ.y);
 
             if (Physics.Raycast(positionToAdjust, Vector3.down, out RaycastHit hit, Mathf.Infinity, groundLayer))
@@ -107,7 +107,18 @@ namespace KemadaTD
                 Debug.LogWarning("No ground detected below the enemy. Check ground colliders and layers.");
             }
 
+            // Calculate the direction from the old position to the new position
+            // Note: We are going to set the position first, then rotate based on the movement direction.
+            Vector3 oldPosition = transform.position;
             transform.position = positionToAdjust;
+
+            // Determine the forward direction (ignore vertical changes)
+            Vector3 direction = (transform.position - oldPosition).normalized;
+            direction.y = 0f; // Ensure the enemy stays upright and doesn't tilt forward/down
+            if (direction.sqrMagnitude > 0.0001f)
+            {
+                transform.forward = direction;
+            }
 
             // Check if we've completed this segment
             if (lerpProgress >= 1f)
@@ -121,6 +132,7 @@ namespace KemadaTD
                 }
             }
         }
+
 
         private void SetNewTarget(Transform nextPoint)
         {
