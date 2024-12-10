@@ -20,9 +20,13 @@ namespace KemadaTD
         public Healthbarv2 healthbar;
 
         // For LERP movement
-        private Vector3 startPosition;
         private float lerpProgress = 0f;
         private float totalDistanceToNextPoint = 0f;
+        private Vector3 startPosition;
+
+        [Header("Ground Check")]
+        public LayerMask groundLayer;
+        private float raycastHeight = 100f; // High above the map to ensure we always cast down to find ground
 
         public void Initialize(float initialHealth, Transform enemyPath)
         {
@@ -38,11 +42,14 @@ namespace KemadaTD
                     pathPoints[i] = path.GetChild(i);
                 }
 
-                // We assume pathPoints[0] exists and is the first point to move to
+                // We'll move along pathPoints in order: 0, 1, 2, ...
+                // Make sure you have at least one point.
                 if (pathPoints.Length > 0)
                 {
+                    // The enemy should already be spawned on a spawn point by the WaveManager.
+                    // Set the starting position for the first segment
                     startPosition = transform.position;
-                    SetNewTarget(pathPoints[0]); // Move towards the first path point
+                    SetNewTarget(pathPoints[0]);
                 }
                 else
                 {
@@ -72,30 +79,37 @@ namespace KemadaTD
 
         private void MoveAlongPath()
         {
-            if (currentPointIndex >= pathPoints.Length)
-            {
-                return;
-            }
+            if (currentPointIndex >= pathPoints.Length) return;
 
             Transform targetPoint = pathPoints[currentPointIndex];
-            if (targetPoint == null)
-            {
-                return;
-            }
+            if (targetPoint == null) return;
 
-            // Increase lerpProgress based on speed and distance
+            // Increment lerp progress based on horizontal travel distance
             float step = (moveSpeed * currentSpeedModifier * Time.deltaTime) / totalDistanceToNextPoint;
             lerpProgress += step;
 
-            // Calculate the new horizontal position using Lerp
-            Vector3 lerpPos = Vector3.Lerp(startPosition, targetPoint.position, lerpProgress);
+            // Compute horizontal (XZ) lerp:
+            Vector2 startXZ = new Vector2(startPosition.x, startPosition.z);
+            Vector2 endXZ = new Vector2(targetPoint.position.x, targetPoint.position.z);
+            Vector2 currentXZ = Vector2.Lerp(startXZ, endXZ, lerpProgress);
 
-            // Now adjust this position to the ground level using a raycast
-            Vector3 adjustedPos = AdjustToGround(lerpPos);
+            // Now find correct Y via raycast
+            Vector3 positionToAdjust = new Vector3(currentXZ.x, raycastHeight, currentXZ.y);
 
-            transform.position = adjustedPos;
+            if (Physics.Raycast(positionToAdjust, Vector3.down, out RaycastHit hit, Mathf.Infinity, groundLayer))
+            {
+                positionToAdjust.y = hit.point.y;
+            }
+            else
+            {
+                // If no ground, keep current Y (unlikely if groundLayer is correct)
+                positionToAdjust.y = transform.position.y;
+                Debug.LogWarning("No ground detected below the enemy. Check ground colliders and layers.");
+            }
 
-            // Check if we reached the end of this segment
+            transform.position = positionToAdjust;
+
+            // Check if we've completed this segment
             if (lerpProgress >= 1f)
             {
                 currentPointIndex++;
@@ -108,32 +122,15 @@ namespace KemadaTD
             }
         }
 
-        private Vector3 AdjustToGround(Vector3 position)
-        {
-            float raycastHeightOffset = 10f;
-            Vector3 rayOrigin = new Vector3(position.x, position.y + raycastHeightOffset, position.z);
-
-            RaycastHit hit;
-            if (Physics.Raycast(rayOrigin, Vector3.down, out hit, Mathf.Infinity))
-            {
-                // If ground is hit, set Y to the ground level
-                position.y = hit.point.y;
-            }
-            else
-            {
-                // If no ground is hit, log a warning and keep position.y as is
-                Debug.LogWarning("No ground detected below the enemy. Check ground colliders.");
-            }
-
-            return position;
-        }
-
-
         private void SetNewTarget(Transform nextPoint)
         {
             if (nextPoint != null)
             {
-                totalDistanceToNextPoint = Vector3.Distance(startPosition, nextPoint.position);
+                // Calculate horizontal distance only
+                Vector2 startXZ = new Vector2(startPosition.x, startPosition.z);
+                Vector2 endXZ = new Vector2(nextPoint.position.x, nextPoint.position.z);
+                totalDistanceToNextPoint = Vector2.Distance(startXZ, endXZ);
+
                 if (Mathf.Approximately(totalDistanceToNextPoint, 0f))
                 {
                     totalDistanceToNextPoint = 0.0001f;
