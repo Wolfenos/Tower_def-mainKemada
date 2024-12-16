@@ -97732,6 +97732,9 @@ MonoBehaviour:
   moneyText: {fileID: 2129989606}
   startingMoney: 500
   moneyPerKill: 1
+  useMoneyPerSecond: 1
+  useMoneyPerKill: 0
+  moneyPerSecond: 1
 --- !u!1001 &2016806364
 PrefabInstance:
   m_ObjectHideFlags: 0

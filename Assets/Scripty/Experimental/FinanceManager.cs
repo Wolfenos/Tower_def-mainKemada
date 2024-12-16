@@ -9,22 +9,52 @@ namespace KemadaTD
         [SerializeField] private TextMeshProUGUI moneyText; // Reference to TextMeshProUGUI for displaying money
 
         [Header("Settings")]
-        [SerializeField] private int startingMoney = 50; // Starting amount of money, adjustable in Inspector
-        [SerializeField] private int moneyPerKill = 1;   // Amount of money earned per enemy kill
+        [SerializeField] private int startingMoney = 50;   // Starting amount of money
+        [SerializeField] private int moneyPerKill = 1;     // Money earned per kill
 
+        [Header("Toggle Settings")]
+        [SerializeField] private bool useMoneyPerSecond = false; // Checkbox for money-per-second
+        [SerializeField] private bool useMoneyPerKill = true;    // Checkbox for money-per-kill
+
+        [Header("Money Per Second Settings")]
+        [SerializeField] private float moneyPerSecond = 1f;  // Amount of money earned each second
+
+        private float timer = 0f;    // Internal timer for money-per-second logic
         private int currentMoney;
 
         private void Start()
         {
-            currentMoney = startingMoney; // Set the initial money to startingMoney
+            currentMoney = startingMoney;
             UpdateMoneyUI();
         }
 
-        // Method to add money when an enemy is killed
+        private void Update()
+        {
+            // If "Money Per Second" is enabled, accumulate money over time
+            if (useMoneyPerSecond)
+            {
+                timer += Time.deltaTime;
+
+                // Every 1 second, add money
+                if (timer >= 1f)
+                {
+                    // Convert moneyPerSecond to integer (or you could keep fractional if desired)
+                    int moneyToAdd = Mathf.RoundToInt(moneyPerSecond);
+                    currentMoney += moneyToAdd;
+                    UpdateMoneyUI();
+                    timer = 0f;
+                }
+            }
+        }
+
+        // Method to add money on enemy kill
         public void AddMoney()
         {
-            currentMoney += moneyPerKill;
-            UpdateMoneyUI();
+            if (useMoneyPerKill)
+            {
+                currentMoney += moneyPerKill;
+                UpdateMoneyUI();
+            }
         }
 
         // Method to deduct money, used for purchases; ensures balance doesn’t go negative
