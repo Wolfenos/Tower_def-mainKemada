@@ -124,7 +124,7 @@ Transform:
   m_GameObject: {fileID: 3637638023559049876}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 1.8215777, y: 12.943002, z: 10.068342}
-  m_LocalScale: {x: 3.9139035, y: 3.9139035, z: 3.9139035}
+  m_LocalScale: {x: 9.337868, y: 9.337868, z: 9.337868}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4407088288675479779}
@@ -180,7 +180,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 40
   healthBarOffset: {x: 0, y: 2, z: 0}
-  moveSpeed: 2
+  moveSpeed: 2.6
   damageNumberPrefab: {fileID: 0}
   healthbar: {fileID: 0}
   groundLayer:

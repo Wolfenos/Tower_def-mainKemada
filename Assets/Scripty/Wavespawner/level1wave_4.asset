@@ -30,7 +30,7 @@ MonoBehaviour:
     - {fileID: 3437186968946855669, guid: f79267d21d2d24446bdb8fadac3427e8, type: 3}
     - {fileID: 3637638023559049876, guid: 04708e368d6d4744496a1f5d1d1a8303, type: 3}
     enemyCounts: 000000000000000003000000
-    spawnInterval: 1
+    spawnInterval: 3
     xSpawnOffsetRange: {x: -2, y: 2}
     zSpawnOffsetRange: {x: -2, y: 2}
   - enemyPath: {fileID: 3522581495311355578, guid: 3b1ab589ed35d2b4788c22ecf00b475b,
@@ -43,4 +43,4 @@ MonoBehaviour:
     spawnInterval: 4
     xSpawnOffsetRange: {x: -2, y: 2}
     zSpawnOffsetRange: {x: -2, y: 2}
-  waveDelay: 191
+  waveDelay: 15

@@ -151,7 +151,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   range: 35
   fireRate: 5
-  damage: 0.6
+  damage: 0.8
   fieldOfViewAngle: 90
   maxAmmo: 60
   reloadTime: 2
