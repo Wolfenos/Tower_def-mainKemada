@@ -8457,6 +8457,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: olgoi_pivot_repair (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 7781495842367749488, guid: f79267d21d2d24446bdb8fadac3427e8,
+        type: 3}
+      propertyPath: moveSpeed
+      value: 1.6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f79267d21d2d24446bdb8fadac3427e8, type: 3}
 --- !u!4 &319940539 stripped
@@ -32684,7 +32689,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 760391418}
-  m_LocalRotation: {x: -0.24767402, y: 0.16514583, z: -0.1240029, w: 0.9465769}
+  m_LocalRotation: {x: -0.24767399, y: 0.16514578, z: -0.124002896, w: 0.94657683}
   m_LocalPosition: {x: -0.0000015778548, y: -0.000002840077, z: -0.0000021662374}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -100357,6 +100362,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2715440700238125201, guid: 4f92856586c6251468c1b097ee2f7da0,
+        type: 3}
+      propertyPath: moveSpeed
+      value: 1.7
+      objectReference: {fileID: 0}
     - target: {fileID: 7052941056349514516, guid: 4f92856586c6251468c1b097ee2f7da0,
         type: 3}
       propertyPath: m_Name
