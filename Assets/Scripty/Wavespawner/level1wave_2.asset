@@ -10,14 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0ca99ead213afd44aa234eccfa29a934, type: 3}
-  m_Name: level1wave
+  m_Name: level1wave_2
   m_EditorClassIdentifier: 
   pathWaves:
   - enemyPath: {fileID: 4619777747977312909, guid: 4a39af7dbd61a454bb6453ac3e2fb080,
       type: 3}
     enemyTypes:
     - {fileID: 7052941056349514516, guid: 4f92856586c6251468c1b097ee2f7da0, type: 3}
-    enemyCounts: 12000000
+    - {fileID: 3437186968946855669, guid: f79267d21d2d24446bdb8fadac3427e8, type: 3}
+    - {fileID: 3637638023559049876, guid: 04708e368d6d4744496a1f5d1d1a8303, type: 3}
+    enemyCounts: 0a0000000000000000000000
     spawnInterval: 1
     xSpawnOffsetRange: {x: -2, y: 2}
     zSpawnOffsetRange: {x: -2, y: 2}
@@ -25,15 +27,20 @@ MonoBehaviour:
       type: 3}
     enemyTypes:
     - {fileID: 7052941056349514516, guid: 4f92856586c6251468c1b097ee2f7da0, type: 3}
-    enemyCounts: 00000000
+    - {fileID: 3437186968946855669, guid: f79267d21d2d24446bdb8fadac3427e8, type: 3}
+    - {fileID: 3637638023559049876, guid: 04708e368d6d4744496a1f5d1d1a8303, type: 3}
+    enemyCounts: 000000000000000004000000
     spawnInterval: 1
     xSpawnOffsetRange: {x: -2, y: 2}
     zSpawnOffsetRange: {x: -2, y: 2}
   - enemyPath: {fileID: 3522581495311355578, guid: 3b1ab589ed35d2b4788c22ecf00b475b,
       type: 3}
-    enemyTypes: []
-    enemyCounts: 
-    spawnInterval: 5
+    enemyTypes:
+    - {fileID: 7052941056349514516, guid: 4f92856586c6251468c1b097ee2f7da0, type: 3}
+    - {fileID: 3437186968946855669, guid: f79267d21d2d24446bdb8fadac3427e8, type: 3}
+    - {fileID: 3637638023559049876, guid: 04708e368d6d4744496a1f5d1d1a8303, type: 3}
+    enemyCounts: 0f0000000000000000000000
+    spawnInterval: 1
     xSpawnOffsetRange: {x: -2, y: 2}
     zSpawnOffsetRange: {x: -2, y: 2}
-  waveDelay: 30
+  waveDelay: 84

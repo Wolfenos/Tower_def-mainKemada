@@ -8998,12 +8998,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b7bdf0b9d2cf0a47baf670280325e9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  range: 13
+  range: 27
   fireRate: 2
-  damage: 132.4
+  damage: 13
   fieldOfViewAngle: 90
-  maxAmmo: 10
-  reloadTime: 0
+  maxAmmo: 20
+  reloadTime: 2
   bulletPrefab: {fileID: 7351834325846446354, guid: 0eeda0dde73a30f438d73f4b2d098ed0,
     type: 3}
   firePoints:

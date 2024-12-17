@@ -50,10 +50,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   range: 45
   fireRate: 1.5
-  damage: 5
+  damage: 40
   fieldOfViewAngle: 90
-  maxAmmo: 1000
-  reloadTime: 0
+  maxAmmo: 12
+  reloadTime: 2
   bulletPrefab: {fileID: 7351834325846446354, guid: 0eeda0dde73a30f438d73f4b2d098ed0,
     type: 3}
   firePoints:

@@ -124,7 +124,7 @@ Transform:
   m_GameObject: {fileID: 3437186968946855669}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 2.5085561, y: 12.943002, z: 9.637099}
-  m_LocalScale: {x: 1.3970277, y: 1.3970277, z: 1.3970277}
+  m_LocalScale: {x: 5.535788, y: 5.535788, z: 5.535788}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2369232770121890946}
@@ -178,9 +178,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 564ca059c3dac78409d861d774fb3d5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 120
+  maxHealth: 1000
   healthBarOffset: {x: 0, y: 2, z: 0}
-  moveSpeed: 2
+  moveSpeed: 1
   damageNumberPrefab: {fileID: 0}
   healthbar: {fileID: 0}
   groundLayer:
@@ -318,7 +318,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a46403b239329854a8a3d778316ca18a, type: 2}
+  - {fileID: 2100000, guid: 766c3f1c6518883408502f7a7a7800f4, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

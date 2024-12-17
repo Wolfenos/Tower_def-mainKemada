@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.31881517, g: 0.29415938, b: 0.22233506, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2014,11 +2014,11 @@ MonoBehaviour:
   - turretName: Shotgun
     prefab: {fileID: 7384956067094733969, guid: 3246ce35799578a40838816756f497da,
       type: 3}
-    cost: 35
+    cost: 40
   - turretName: dalka
     prefab: {fileID: 5421527271527446207, guid: 036fdf766ed607145b6550455172aaf0,
       type: 3}
-    cost: 30
+    cost: 75
   - turretName: Rychlopalka
     prefab: {fileID: 6202705650063123537, guid: 72b3ee8d361ca83429b7ade13b48e07e,
       type: 3}
@@ -32685,7 +32685,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 760391418}
   m_LocalRotation: {x: -0.24767402, y: 0.16514583, z: -0.1240029, w: 0.9465769}
-  m_LocalPosition: {x: -0.0000027014262, y: -0.000004853411, z: -0.0000037201933}
+  m_LocalPosition: {x: -0.0000015778548, y: -0.000002840077, z: -0.0000021662374}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -56587,8 +56587,8 @@ MonoBehaviour:
     isActive: 0
     isPassive: 1
     color: {r: 1, g: 0, b: 0.4847226, a: 1}
-  rotationAmount: 90
-  rotationDuration: 0.5
+  rotationAmount: 45
+  rotationDuration: 0.25
   rotationSpeed: 1
 --- !u!4 &1179829184
 Transform:
@@ -74187,7 +74187,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 30
+  m_text: 75
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -86623,7 +86623,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 35
+  m_text: 40
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -99556,7 +99556,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   levelWaves:
   - {fileID: 11400000, guid: 46dd83b015a66a042971e68f6207c126, type: 2}
-  - {fileID: 11400000, guid: f02d2e9076e7cb24593d0c3dcff03874, type: 2}
+  - {fileID: 11400000, guid: 271489701522c7b40a3e608b52a75fae, type: 2}
+  - {fileID: 11400000, guid: 0aa0b7c1ab528b8439277d63409754e9, type: 2}
+  - {fileID: 11400000, guid: afa42bcd0ea31e440828b5044b7a747d, type: 2}
+  - {fileID: 11400000, guid: 3efdaf343c9bd1b4bac6b8dda71b0f17, type: 2}
   loopWaves: 0
 --- !u!1 &2114752332
 GameObject:
