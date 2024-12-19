@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
+  m_IndirectSpecularColor: {r: 0.31881517, g: 0.29415938, b: 0.22233506, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1667,7 +1667,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BindingMode: 1
-  m_FollowOffset: {x: 0, y: 9, z: -15}
+  m_FollowOffset: {x: 0, y: 7, z: -12}
   m_XDamping: 1
   m_YDamping: 1
   m_ZDamping: 1
@@ -9322,7 +9322,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 408637758}
   m_LocalRotation: {x: 0.18089369, y: -0.15607283, z: 0.13524471, w: 0.9615756}
-  m_LocalPosition: {x: 4.8316906e-13, y: 0.21594584, z: -3.5990753}
+  m_LocalPosition: {x: 3.3349135e-13, y: 0.0000010983517, z: 0.0000037755844}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -9372,7 +9372,7 @@ MonoBehaviour:
         m_Calls: []
   m_LegacyBlendHint: 0
   m_YAxis:
-    Value: 1
+    Value: 0.5
     m_SpeedMode: 0
     m_MaxSpeed: 2
     m_AccelTime: 0.2
@@ -32689,8 +32689,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 760391418}
-  m_LocalRotation: {x: -0.24767399, y: 0.16514578, z: -0.124002896, w: 0.94657683}
-  m_LocalPosition: {x: -0.0000015778548, y: -0.000002840077, z: -0.0000021662374}
+  m_LocalRotation: {x: -0.25351197, y: 0.16590805, z: -0.12298119, w: 0.9450301}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -33194,8 +33194,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 833407732}
-  m_LocalRotation: {x: -0.17495494, y: 0.15523505, z: -0.1362055, w: 0.9626738}
-  m_LocalPosition: {x: -0.0000008600176, y: -0.0000014393926, z: -0.0000013175706}
+  m_LocalRotation: {x: -0.18089366, y: 0.15607283, z: -0.13524471, w: 0.9615756}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -50291,7 +50291,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BindingMode: 1
-  m_FollowOffset: {x: 0, y: 9, z: -15}
+  m_FollowOffset: {x: 0, y: 7, z: -12}
   m_XDamping: 1
   m_YDamping: 1
   m_ZDamping: 1
@@ -68696,8 +68696,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1393051895}
-  m_LocalRotation: {x: 0.006172478, y: -3.5527137e-15, z: 2.6645353e-15, w: 0.999981}
-  m_LocalPosition: {x: 4.8316906e-13, y: 0.21594584, z: -3.5990753}
+  m_LocalRotation: {x: 0.000000059604645, y: 0.000000025742608, z: -0.000000015016525,
+    w: 1}
+  m_LocalPosition: {x: 3.3349135e-13, y: 0.0000010983517, z: 0.0000037755844}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -97956,7 +97957,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BindingMode: 1
-  m_FollowOffset: {x: 0, y: 9, z: -15}
+  m_FollowOffset: {x: 0, y: 7, z: -12}
   m_XDamping: 1
   m_YDamping: 1
   m_ZDamping: 1
@@ -98866,6 +98867,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2037678237}
   - component: {fileID: 2037678236}
+  - component: {fileID: 2037678238}
   m_Layer: 8
   m_Name: CameraController
   m_TagString: Untagged
@@ -98880,7 +98882,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2037678235}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dda0f81b5e130dd4086aa35e9088d4cf, type: 3}
   m_Name: 
@@ -98907,6 +98909,30 @@ Transform:
   m_Father: {fileID: 2025872342}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2037678238
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2037678235}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9cbe3e1fe9132b4448f45108350e1588, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  freeLookCamera: {fileID: 408637761}
+  enableKeyboardRotation: 1
+  rotateLeftKey: 97
+  rotateRightKey: 100
+  rotateUpKey: 119
+  rotateDownKey: 115
+  keyboardHorizontalSpeed: 125
+  keyboardVerticalSpeed: 0.5
+  enableMouseDragRotation: 1
+  holdRightMouseToRotate: 1
+  mouseHorizontalSpeed: 100
+  mouseVerticalSpeed: 0.5
 --- !u!1001 &2044707772
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -99770,8 +99796,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2125746267}
-  m_LocalRotation: {x: -0.17495494, y: 0.15523505, z: -0.1362055, w: 0.9626738}
-  m_LocalPosition: {x: -0.0000008600176, y: -0.0000014393926, z: -0.0000013175706}
+  m_LocalRotation: {x: -0.18089366, y: 0.15607283, z: -0.13524471, w: 0.9615756}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
