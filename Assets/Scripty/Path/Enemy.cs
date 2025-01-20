@@ -6,6 +6,9 @@ namespace KemadaTD
 {
     public class Enemy : MonoBehaviour
     {
+        // New: static event to notify when an enemy dies
+        public static System.Action<Enemy> OnEnemyDied;
+
         public float maxHealth = 100f;
         private float health;
         public Vector3 healthBarOffset = new Vector3(0, 2, 0);
@@ -43,11 +46,9 @@ namespace KemadaTD
                 }
 
                 // We'll move along pathPoints in order: 0, 1, 2, ...
-                // Make sure you have at least one point.
                 if (pathPoints.Length > 0)
                 {
                     // The enemy should already be spawned on a spawn point by the WaveManager.
-                    // Set the starting position for the first segment
                     startPosition = transform.position;
                     SetNewTarget(pathPoints[0]);
                 }
@@ -102,19 +103,17 @@ namespace KemadaTD
             }
             else
             {
-                // If no ground, keep current Y (unlikely if groundLayer is correct)
                 positionToAdjust.y = transform.position.y;
                 Debug.LogWarning("No ground detected below the enemy. Check ground colliders and layers.");
             }
 
             // Calculate the direction from the old position to the new position
-            // Note: We are going to set the position first, then rotate based on the movement direction.
             Vector3 oldPosition = transform.position;
             transform.position = positionToAdjust;
 
-            // Determine the forward direction (ignore vertical changes)
+            // Determine the forward direction
             Vector3 direction = (transform.position - oldPosition).normalized;
-            direction.y = 0f; // Ensure the enemy stays upright and doesn't tilt forward/down
+            direction.y = 0f;
             if (direction.sqrMagnitude > 0.0001f)
             {
                 transform.forward = direction;
@@ -132,7 +131,6 @@ namespace KemadaTD
                 }
             }
         }
-
 
         private void SetNewTarget(Transform nextPoint)
         {
@@ -176,12 +174,15 @@ namespace KemadaTD
             FinanceManager financeManager = FindObjectOfType<FinanceManager>();
             if (financeManager != null)
             {
-                financeManager.AddMoney();
+                financeManager.AddMoney(); // original behavior
             }
             else
             {
                 Debug.LogWarning("FinanceManager not found in the scene!");
             }
+
+            // Notify listeners that this enemy has died
+            OnEnemyDied?.Invoke(this);
 
             if (healthbar != null)
             {

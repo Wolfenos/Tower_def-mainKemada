@@ -38,7 +38,6 @@ namespace KemadaTD
                 // Every 1 second, add money
                 if (timer >= 1f)
                 {
-                    // Convert moneyPerSecond to integer (or you could keep fractional if desired)
                     int moneyToAdd = Mathf.RoundToInt(moneyPerSecond);
                     currentMoney += moneyToAdd;
                     UpdateMoneyUI();
@@ -55,6 +54,13 @@ namespace KemadaTD
                 currentMoney += moneyPerKill;
                 UpdateMoneyUI();
             }
+        }
+
+        // Overload: Add a custom amount of money
+        public void AddMoney(int amount)
+        {
+            currentMoney += amount;
+            UpdateMoneyUI();
         }
 
         // Method to deduct money, used for purchases; ensures balance doesn’t go negative

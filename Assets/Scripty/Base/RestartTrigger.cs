@@ -1,21 +1,21 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
+using KemadaTD; // <-- Important if WaveUIEnhancer/Enemy are in namespace KemadaTD
 
 public class RestartTrigger : MonoBehaviour
 {
     [SerializeField] private string targetTag = "Enemy";
     [SerializeField] private string menuSceneName = "Menu";
 
-    [SerializeField] private int baseHealth = 10;    // Health can be set in Inspector
-    [SerializeField] private TMP_Text healthText;    // Link to TextMesh Pro component
+    [SerializeField] private int baseHealth = 10;
+    [SerializeField] private TMP_Text healthText;
 
     private void Start()
     {
-        // Make the trigger collider non-clickable and non-interactable by the player
+        // Make the trigger collider non-interactable
         gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
 
-        // Initialize the health display if healthText is assigned
         if (healthText != null)
         {
             healthText.text = baseHealth.ToString();
@@ -24,41 +24,28 @@ public class RestartTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log($"Object with tag '{other.tag}' entered the trigger.");
-
         if (other.CompareTag(targetTag))
         {
-            Debug.Log("Enemy entered the trigger.");
-
-            // 1) Subtract one health
+            // Reduce base health
             baseHealth--;
+            if (healthText != null) healthText.text = baseHealth.ToString();
 
-            // 2) Update UI if assigned
-            if (healthText != null)
+            // Get the Enemy component (if any)
+            Enemy enemyComponent = other.GetComponent<Enemy>();
+            if (enemyComponent != null)
             {
-                healthText.text = baseHealth.ToString();
+                // Manually broadcast "OnEnemyDied" so that WaveUIEnhancer living-enemy count is decremented
+                Enemy.OnEnemyDied?.Invoke(enemyComponent);
             }
 
-            // 3) Destroy the enemy object
+            // Destroy the enemy
             Destroy(other.gameObject);
 
-            // 4) If health is depleted, switch to the specified scene
+            // Check if base is dead
             if (baseHealth <= 0)
             {
-                Debug.Log("Base health is depleted. Switching scene...");
                 SwitchScene();
             }
-        }
-        else
-        {
-            Debug.LogWarning($"Object with tag '{other.tag}' does not match the target tag '{targetTag}'.");
-        }
-
-        Rigidbody rb = other.GetComponent<Rigidbody>();
-        if (rb == null)
-        {
-            Debug.LogWarning("The object that entered the trigger does not have a Rigidbody. " +
-                             "A Rigidbody is required for proper trigger interaction.");
         }
     }
 
@@ -70,7 +57,8 @@ public class RestartTrigger : MonoBehaviour
         }
         else
         {
-            Debug.LogError($"Scene '{menuSceneName}' cannot be loaded. Make sure it is added to the build settings.");
+            Debug.LogError($"Scene '{menuSceneName}' cannot be loaded. " +
+                           "Make sure it is added to the build settings.");
         }
     }
 }
