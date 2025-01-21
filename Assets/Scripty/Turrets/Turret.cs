@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using TMPro; // For TextMeshProUGUI
+using System.Collections.Generic; // For List<>
 
 namespace KemadaTD
 {
@@ -20,6 +21,14 @@ namespace KemadaTD
         public Transform[] firePoints;        // Array of points where the bullets are fired from
         public Transform rotatingPart;        // Part of the turret that will rotate towards the target
         public TextMeshProUGUI ammoText;      // UI Text to display ammo count (assign in Inspector)
+
+        // ==================== NEW AUDIO SECTION ====================
+        [Header("Audio Settings")]
+        [Tooltip("List of possible shooting sounds. One is chosen at random for each shot.")]
+        [SerializeField] private List<AudioClip> shootClips;
+        [Tooltip("Reference to an AudioSource on the turret for playing shoot sounds.")]
+        [SerializeField] private AudioSource audioSource;
+        // ==========================================================
 
         private float currentAmmo;            // Current ammo count (using float for smooth reloading)
         private float reloadRate;             // Rate at which ammo is reloaded per second
@@ -115,11 +124,10 @@ namespace KemadaTD
             if (target == null || rotatingPart == null)
                 return;
 
-            // Calculate the direction to the target
             Vector3 direction = target.position - rotatingPart.position;
             Quaternion lookRotation = Quaternion.LookRotation(direction);
             Vector3 rotation = Quaternion.Lerp(rotatingPart.rotation, lookRotation, Time.deltaTime * 10f).eulerAngles;
-            rotatingPart.rotation = Quaternion.Euler(0f, rotation.y, 0f); // Rotate only on the Y-axis
+            rotatingPart.rotation = Quaternion.Euler(0f, rotation.y, 0f);
         }
 
         // Fire at the target
@@ -132,8 +140,17 @@ namespace KemadaTD
                 Bullet bullet = bulletGO.GetComponent<Bullet>();
                 if (bullet != null)
                 {
-                    bullet.Seek(target, damage); // Pass target and damage to the bullet
+                    bullet.Seek(target, damage);
                 }
+
+                // ==================== NEW AUDIO LOGIC ====================
+                // Play a random shoot sound once for each bullet fired
+                if (audioSource != null && shootClips != null && shootClips.Count > 0)
+                {
+                    int randomIndex = Random.Range(0, shootClips.Count);
+                    audioSource.PlayOneShot(shootClips[randomIndex]);
+                }
+                // ========================================================
             }
         }
 
@@ -143,7 +160,7 @@ namespace KemadaTD
             if (circleController == null)
                 return; // Ensure CircleController is available
 
-            GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy"); // Ensure enemies are tagged as "Enemy"
+            GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
             float shortestDistance = Mathf.Infinity;
             GameObject nearestEnemy = null;
 
@@ -205,10 +222,7 @@ namespace KemadaTD
                 return true; // Default to active if CircleController not found
             }
 
-            // Calculate the direction from the center point to the turret's position in world space
             Vector3 direction = transform.position - centerPoint;
-
-            // Calculate the angle between the world's forward direction and the direction to the turret
             float angle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
             if (angle < 0f)
                 angle += 360f;
@@ -218,25 +232,20 @@ namespace KemadaTD
                 float startAngle = sector.startAngle % 360f;
                 float endAngle = sector.endAngle % 360f;
 
-                // Check if the angle falls within the sector
                 if (IsAngleInSector(angle, startAngle, endAngle))
                 {
-                    // Determine sector status based on Active and Passive checkboxes
                     bool isActiveSector;
 
                     if (sector.isActive || (sector.isActive && sector.isPassive))
                     {
-                        // Sector is active
                         isActiveSector = true;
                     }
                     else if (sector.isPassive && !sector.isActive)
                     {
-                        // Sector is passive
                         isActiveSector = false;
                     }
                     else
                     {
-                        // If neither is selected, default to passive
                         isActiveSector = false;
                     }
 
@@ -244,22 +253,18 @@ namespace KemadaTD
                 }
             }
 
-            // If not in any sector, default to passive
             return false;
         }
 
         // Helper method to determine if an angle is within a sector, accounting for wrap-around
         private bool IsAngleInSector(float angle, float startAngle, float endAngle)
         {
-            // Angles are already normalized in the calling method
             if (startAngle <= endAngle)
             {
-                // Normal sector (no wrap-around)
                 return angle >= startAngle && angle <= endAngle;
             }
             else
             {
-                // Wrap-around sector
                 return angle >= startAngle || angle <= endAngle;
             }
         }
@@ -290,7 +295,7 @@ namespace KemadaTD
             Gizmos.DrawLine(transform.position, transform.position + leftBoundary * range);
             Gizmos.DrawLine(transform.position, transform.position + rightBoundary * range);
 
-            // Optionally, draw an arc to represent the cone (for visualization)
+            // Optionally, draw an arc to represent the cone
             int segments = 20;
             float angleStep = fieldOfViewAngle / segments;
             Vector3 previousPoint = transform.position + leftBoundary * range;
