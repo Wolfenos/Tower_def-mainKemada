@@ -382,9 +382,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 564ca059c3dac78409d861d774fb3d5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
+  maxHealth: 120
   healthBarOffset: {x: 0, y: 2, z: 0}
-  moveSpeed: 5
+  moveSpeed: 2
   damageNumberPrefab: {fileID: 0}
   healthbar: {fileID: 0}
   groundLayer:
