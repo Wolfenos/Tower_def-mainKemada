@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System; // for Action
 
 namespace KemadaTD
 {
@@ -8,14 +9,6 @@ namespace KemadaTD
     {
         [SerializeField] private List<WaveConfig> levelWaves;
         [SerializeField] private bool loopWaves = false;
-
-        // ----------------- NEW FIELDS -----------------
-        [SerializeField] private bool startFirstWaveAutomatically = true;
-        [SerializeField] private float timeBeforeFirstWave = 0f;
-
-        // We use this to flag when the button has been clicked
-        private bool waveManuallyStarted = false;
-        // ------------------------------------------------
 
         // Event to let WaveUIEnhancer track spawns
         public System.Action<GameObject> OnEnemySpawned;
@@ -25,6 +18,18 @@ namespace KemadaTD
         // Track living enemies in the current wave
         private int waveEnemiesToSpawn = 0;
         private int waveEnemiesAlive = 0;
+
+        // =========================== NEW FIELDS ===========================
+        [SerializeField] private bool startFirstWaveAutomatically = true;
+        [SerializeField] private float timeBeforeFirstWave = 0f;
+        private bool waveManuallyStarted = false;
+
+        /// <summary>
+        /// Event fired after all waves complete (if loopWaves == false).
+        /// Usage: waveManager.OnAllWavesCompleted += SomeHandler;
+        /// </summary>
+        public event Action OnAllWavesCompleted;
+        // =================================================================
 
         private void OnEnable()
         {
@@ -39,7 +44,6 @@ namespace KemadaTD
 
         private void Start()
         {
-            // ORIGINAL LINE (unchanged)
             StartCoroutine(SpawnAllWaves());
         }
 
@@ -51,19 +55,19 @@ namespace KemadaTD
 
         private IEnumerator SpawnAllWaves()
         {
-            // ----------------- ADDED LOGIC -----------------
+            // ================== NEW WAIT LOGIC ===================
             // 1) If auto-start is false, wait until StartFirstWaveManually() is invoked
             if (!startFirstWaveAutomatically && !waveManuallyStarted)
             {
                 yield return new WaitUntil(() => waveManuallyStarted);
             }
 
-            // 2) Wait for the optional delay before the first wave
+            // 2) Optional delay before the first wave
             if (timeBeforeFirstWave > 0f)
             {
                 yield return new WaitForSeconds(timeBeforeFirstWave);
             }
-            // ------------------------------------------------
+            // =====================================================
 
             do
             {
@@ -77,6 +81,15 @@ namespace KemadaTD
                     // Now do the wave delay (unless you want no delay if wave is empty)
                     yield return StartCoroutine(WaitBetweenWaves(levelWaves[i].waveDelay));
                 }
+
+                // ==================== NEW EVENT TRIGGER ====================
+                // If we are not looping waves, we've finished all waves
+                if (!loopWaves)
+                {
+                    OnAllWavesCompleted?.Invoke();
+                }
+                // ==========================================================
+
             }
             while (loopWaves);
         }
@@ -173,8 +186,8 @@ namespace KemadaTD
                     }
 
                     // random offset
-                    float xOffset = Random.Range(pathWave.xSpawnOffsetRange.x, pathWave.xSpawnOffsetRange.y);
-                    float zOffset = Random.Range(pathWave.zSpawnOffsetRange.x, pathWave.zSpawnOffsetRange.y);
+                    float xOffset = UnityEngine.Random.Range(pathWave.xSpawnOffsetRange.x, pathWave.xSpawnOffsetRange.y);
+                    float zOffset = UnityEngine.Random.Range(pathWave.zSpawnOffsetRange.x, pathWave.zSpawnOffsetRange.y);
                     spawnPosition += new Vector3(xOffset, 0f, zOffset);
 
                     GameObject newEnemy = Instantiate(enemyType, spawnPosition, Quaternion.identity);
@@ -198,7 +211,7 @@ namespace KemadaTD
             }
         }
 
-        // ----------------- NEW PUBLIC METHOD -----------------
+        // ===================== NEW PUBLIC METHOD =====================
         /// <summary>
         /// Call this from a UI Button to manually start the first wave
         /// if 'startFirstWaveAutomatically' is set to false.
@@ -207,6 +220,6 @@ namespace KemadaTD
         {
             waveManuallyStarted = true;
         }
-        // -----------------------------------------------------
+        // ============================================================
     }
 }
