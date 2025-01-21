@@ -63,6 +63,9 @@ MonoBehaviour:
   - {fileID: 3798555224729792027}
   rotatingPart: {fileID: 659665833313522249}
   ammoText: {fileID: 3858290468489636210}
+  shootClips: []
+  audioSource: {fileID: 6765968145666607224, guid: 3d31d521f2ffebb45b324b9087d1a84b,
+    type: 3}
 --- !u!65 &3817407918362495808
 BoxCollider:
   m_ObjectHideFlags: 0
