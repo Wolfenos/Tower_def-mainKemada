@@ -19,7 +19,7 @@ MonoBehaviour:
     - {fileID: 4019668537646770842, guid: 557aec8fb76c0fc4b837ef69a449afc2, type: 3}
     - {fileID: 6972880102010950098, guid: f2e7f6e9e6ce783418cc7fe99b8ce9ea, type: 3}
     - {fileID: 5034695357245231797, guid: 814c939f4b6d7214f8ee41cce7691dc7, type: 3}
-    enemyCounts: 000000000a00000000000000
+    enemyCounts: 030000000a00000000000000
     spawnInterval: 2.5
     xSpawnOffsetRange: {x: -2, y: 2}
     zSpawnOffsetRange: {x: -2, y: 2}
