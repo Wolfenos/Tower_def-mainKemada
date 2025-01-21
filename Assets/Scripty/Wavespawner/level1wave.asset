@@ -16,7 +16,7 @@ MonoBehaviour:
   - enemyPath: {fileID: 4619777747977312909, guid: 4a39af7dbd61a454bb6453ac3e2fb080,
       type: 3}
     enemyTypes:
-    - {fileID: 5034695357245231797, guid: 814c939f4b6d7214f8ee41cce7691dc7, type: 3}
+    - {fileID: 1076065154931910002, guid: c08031fc236037e4a96c7fb5a7dd120a, type: 3}
     enemyCounts: 09000000
     spawnInterval: 3
     xSpawnOffsetRange: {x: -2, y: 2}
@@ -24,7 +24,7 @@ MonoBehaviour:
   - enemyPath: {fileID: 1106413836485196884, guid: aafc34bab0be8d6438e94795e617f254,
       type: 3}
     enemyTypes:
-    - {fileID: 5034695357245231797, guid: 814c939f4b6d7214f8ee41cce7691dc7, type: 3}
+    - {fileID: 1076065154931910002, guid: c08031fc236037e4a96c7fb5a7dd120a, type: 3}
     - {fileID: 7052941056349514516, guid: 4f92856586c6251468c1b097ee2f7da0, type: 3}
     - {fileID: 7052941056349514516, guid: 4f92856586c6251468c1b097ee2f7da0, type: 3}
     enemyCounts: 050000000000000000000000
@@ -34,7 +34,7 @@ MonoBehaviour:
   - enemyPath: {fileID: 3522581495311355578, guid: 3b1ab589ed35d2b4788c22ecf00b475b,
       type: 3}
     enemyTypes:
-    - {fileID: 6972880102010950098, guid: f2e7f6e9e6ce783418cc7fe99b8ce9ea, type: 3}
+    - {fileID: 1076065154931910002, guid: c08031fc236037e4a96c7fb5a7dd120a, type: 3}
     - {fileID: 7052941056349514516, guid: 4f92856586c6251468c1b097ee2f7da0, type: 3}
     enemyCounts: 0500000004000000
     spawnInterval: 4
