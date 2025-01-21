@@ -9,6 +9,14 @@ namespace KemadaTD
         [SerializeField] private List<WaveConfig> levelWaves;
         [SerializeField] private bool loopWaves = false;
 
+        // ----------------- NEW FIELDS -----------------
+        [SerializeField] private bool startFirstWaveAutomatically = true;
+        [SerializeField] private float timeBeforeFirstWave = 0f;
+
+        // We use this to flag when the button has been clicked
+        private bool waveManuallyStarted = false;
+        // ------------------------------------------------
+
         // Event to let WaveUIEnhancer track spawns
         public System.Action<GameObject> OnEnemySpawned;
 
@@ -31,6 +39,7 @@ namespace KemadaTD
 
         private void Start()
         {
+            // ORIGINAL LINE (unchanged)
             StartCoroutine(SpawnAllWaves());
         }
 
@@ -42,6 +51,20 @@ namespace KemadaTD
 
         private IEnumerator SpawnAllWaves()
         {
+            // ----------------- ADDED LOGIC -----------------
+            // 1) If auto-start is false, wait until StartFirstWaveManually() is invoked
+            if (!startFirstWaveAutomatically && !waveManuallyStarted)
+            {
+                yield return new WaitUntil(() => waveManuallyStarted);
+            }
+
+            // 2) Wait for the optional delay before the first wave
+            if (timeBeforeFirstWave > 0f)
+            {
+                yield return new WaitForSeconds(timeBeforeFirstWave);
+            }
+            // ------------------------------------------------
+
             do
             {
                 for (int i = currentWaveIndex; i < levelWaves.Count; i++)
@@ -174,5 +197,16 @@ namespace KemadaTD
                 }
             }
         }
+
+        // ----------------- NEW PUBLIC METHOD -----------------
+        /// <summary>
+        /// Call this from a UI Button to manually start the first wave
+        /// if 'startFirstWaveAutomatically' is set to false.
+        /// </summary>
+        public void StartFirstWaveManually()
+        {
+            waveManuallyStarted = true;
+        }
+        // -----------------------------------------------------
     }
 }
