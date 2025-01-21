@@ -8998,9 +8998,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b7bdf0b9d2cf0a47baf670280325e9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  range: 29
-  fireRate: 2
-  damage: 20
+  range: 23
+  fireRate: 1.68
+  damage: 26.8
   fieldOfViewAngle: 90
   maxAmmo: 20
   reloadTime: 2
